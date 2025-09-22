@@ -76,8 +76,12 @@ const SceneShell = ({ children }: SceneShellProps) => {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [currentScene, isTransitioning])
 
-  // Wheel navigation
+  // Wheel navigation - Only for desktop devices
   useEffect(() => {
+    // Check if device is mobile/tablet
+    const isMobileOrTablet = window.innerWidth < 768 || ('ontouchstart' in window)
+    if (isMobileOrTablet) return
+
     let wheelTimeout: NodeJS.Timeout | null = null
     let isScrolling = false
 
@@ -127,27 +131,31 @@ const SceneShell = ({ children }: SceneShellProps) => {
     }
   }, [currentScene, isTransitioning])
 
-  // Touch navigation for mobile devices
+  // Touch navigation for mobile and tablet devices (horizontal swipe)
   useEffect(() => {
-    let touchStartY = 0
-    let touchEndY = 0
+    // Check if device is mobile/tablet
+    const isMobileOrTablet = window.innerWidth < 768 || ('ontouchstart' in window)
+    if (!isMobileOrTablet) return
+
+    let touchStartX = 0
+    let touchEndX = 0
     let touchTimeout: NodeJS.Timeout | null = null
     let isTouching = false
 
     const handleTouchStart = (e: TouchEvent) => {
       if (isTransitioning || isTouching) return
-      touchStartY = e.touches[0].clientY
+      touchStartX = e.touches[0].clientX
       isTouching = true
     }
 
     const handleTouchEnd = (e: TouchEvent) => {
       if (isTransitioning || !isTouching) return
       
-      touchEndY = e.changedTouches[0].clientY
-      const deltaY = touchStartY - touchEndY
+      touchEndX = e.changedTouches[0].clientX
+      const deltaX = touchStartX - touchEndX
       const threshold = 50
 
-      if (Math.abs(deltaY) < threshold) {
+      if (Math.abs(deltaX) < threshold) {
         isTouching = false
         return
       }
@@ -155,13 +163,13 @@ const SceneShell = ({ children }: SceneShellProps) => {
       const scenes = Object.keys(SCENES) as SceneType[]
       const currentIndex = scenes.indexOf(currentScene)
 
-      if (deltaY > 0) {
-        // Swipe up - next scene
+      if (deltaX > 0) {
+        // Swipe left - next scene
         if (currentIndex < scenes.length - 1) {
           useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
         }
       } else {
-        // Swipe down - previous scene
+        // Swipe right - previous scene
         if (currentIndex > 0) {
           useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
         }
@@ -185,22 +193,25 @@ const SceneShell = ({ children }: SceneShellProps) => {
   }, [currentScene, isTransitioning])
 
   const sceneVariants = {
-    idle: { opacity: 1, scale: 1, y: 0 },
+    idle: { opacity: 1, scale: 1, x: 0, y: 0 },
     out: { 
       opacity: 0, 
       scale: 0.95, 
-      y: 50,
+      x: 50,
+      y: 0,
       transition: { duration: 0.3, ease: 'easeIn' as const }
     },
     in: { 
       opacity: 0, 
       scale: 1.05, 
-      y: -50,
+      x: -50,
+      y: 0,
       transition: { duration: 0.3, ease: 'easeOut' as const }
     },
     ready: { 
       opacity: 1, 
       scale: 1, 
+      x: 0,
       y: 0,
       transition: { duration: 0.3, ease: 'easeOut' as const }
     }
@@ -306,30 +317,56 @@ const SceneShell = ({ children }: SceneShellProps) => {
         </motion.div>
       </div>
 
-      {/* Scroll Hint - Only show on Hero scene */}
+      {/* Navigation Hint - Different for mobile/tablet and desktop */}
       {currentScene === 'hero' && (
-        <motion.div
-          className="hidden md:block fixed bottom-6 left-[46.5%] z-50"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-        >
-          {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
-          <div className="flex flex-col items-center space-y-2">
-            <motion.div
-              className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center"
-              animate={{ y: [0, 4, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            >
+        <>
+          {/* Desktop scroll hint */}
+          <motion.div
+            className="hidden md:block fixed bottom-6 left-[46.5%] z-50"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+          >
+            <div className="flex flex-col items-center space-y-2">
               <motion.div
-                className="w-1 h-3 bg-white/70 rounded-full mt-2"
-                animate={{ opacity: [0.3, 1, 0.3] }}
+                className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center"
+                animate={{ y: [0, 4, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              />
-            </motion.div>
-            <p className="text-white/60 text-xs">Scroll to navigate</p>
-          </div>
-        </motion.div>
+              >
+                <motion.div
+                  className="w-1 h-3 bg-white/70 rounded-full mt-2"
+                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                />
+              </motion.div>
+              <p className="text-white/60 text-xs">Scroll to navigate</p>
+            </div>
+          </motion.div>
+
+          {/* Mobile/Tablet swipe hint */}
+          <motion.div
+            className="block md:hidden fixed bottom-6 left-1/2 z-50"
+            style={{ transform: 'translateX(-50%)' }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+          >
+            <div className="flex flex-col items-center space-y-2">
+              <motion.div
+                className="w-10 h-6 border-2 border-white/50 rounded-full flex items-center justify-center"
+                animate={{ x: [-2, 2, -2] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <motion.div
+                  className="w-3 h-1 bg-white/70 rounded-full"
+                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                />
+              </motion.div>
+              <p className="text-white/60 text-xs">Swipe to navigate</p>
+            </div>
+          </motion.div>
+        </>
       )}
     </div>
   )
