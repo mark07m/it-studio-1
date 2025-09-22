@@ -20,34 +20,29 @@ const SceneShell = ({ children }: SceneShellProps) => {
   
   const [displayScene, setDisplayScene] = useState<SceneType>(currentScene)
   const [transitionDirection, setTransitionDirection] = useState<'left' | 'right' | null>(null)
-  const [previousScene, setPreviousScene] = useState<SceneType | null>(null)
 
   // FSM для управления переходами между сценами
   useEffect(() => {
     if (isTransitioning) return
 
     if (displayScene !== currentScene) {
-      // Определяем направление перехода
-      const scenes = Object.keys(SCENES) as SceneType[]
-      const currentIndex = scenes.indexOf(currentScene)
-      const displayIndex = scenes.indexOf(displayScene)
-      const direction = currentIndex > displayIndex ? 'right' : 'left'
-      
-      setTransitionDirection(direction)
-      setPreviousScene(displayScene)
-      
-      // Начинаем переход - сразу меняем сцену и показываем новую
+      // Направление уже установлено в кнопках навигации
+      // Начинаем переход - сначала анимация выхода старой сцены
       setTransitioning(true)
-      setDisplayScene(currentScene)
-      setSceneState('in')
+      setSceneState('out')
       
-      // После анимации входа
+      // После анимации выхода - меняем сцену и показываем новую
       setTimeout(() => {
-        setSceneState('ready')
-        setTransitioning(false)
-        setTransitionDirection(null)
-        setPreviousScene(null)
-      }, 400)
+        setDisplayScene(currentScene)
+        setSceneState('in')
+        
+        // После анимации входа
+        setTimeout(() => {
+          setSceneState('ready')
+          setTransitioning(false)
+          setTransitionDirection(null)
+        }, 300)
+      }, 300)
     }
   }, [currentScene, displayScene, isTransitioning, setSceneState, setTransitioning])
 
@@ -201,8 +196,8 @@ const SceneShell = ({ children }: SceneShellProps) => {
         x: isLeftTransition ? '100%' : '-100%', // Сдвигаем за пределы контейнера
         y: 0,
         transition: { 
-          duration: 0.4, 
-          ease: [0.25, 0.1, 0.25, 1] as const // Плавный выход
+          duration: 0.3, 
+          ease: [0.4, 0.0, 0.2, 1] as const // Быстрый выход
         }
       },
       in: { 
@@ -211,8 +206,8 @@ const SceneShell = ({ children }: SceneShellProps) => {
         x: isLeftTransition ? '-100%' : '100%', // Начинаем с противоположной стороны
         y: 0,
         transition: { 
-          duration: 0.4, 
-          ease: [0.25, 0.1, 0.25, 1] as const // Плавный вход
+          duration: 0.3, 
+          ease: [0.4, 0.0, 0.2, 1] as const // Быстрый вход
         }
       },
       ready: { 
@@ -221,8 +216,8 @@ const SceneShell = ({ children }: SceneShellProps) => {
         x: 0,
         y: 0,
         transition: { 
-          duration: 0.4, 
-          ease: [0.25, 0.1, 0.25, 1] as const
+          duration: 0.3, 
+          ease: [0.4, 0.0, 0.2, 1] as const
         }
       }
     }
@@ -269,7 +264,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
           willChange: 'transform'
         }}
       >
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           <motion.div
             key={displayScene}
             variants={sceneVariants}
@@ -290,29 +285,6 @@ const SceneShell = ({ children }: SceneShellProps) => {
             {children}
           </motion.div>
         </AnimatePresence>
-        
-        {/* Previous scene for smooth transition */}
-        {previousScene && isTransitioning && (
-          <motion.div
-            key={`prev-${previousScene}`}
-            variants={sceneVariants}
-            initial="ready"
-            animate="out"
-            className={`absolute inset-0 w-full h-full ${
-              previousScene !== 'hero' ? 'md:max-w-6xl md:mx-auto' : ''
-            }`}
-            style={{ 
-              willChange: 'transform',
-              backfaceVisibility: 'hidden',
-              transform: 'translateZ(0)',
-              isolation: 'isolate',
-              zIndex: 5
-            }}
-          >
-            {/* Render previous scene content */}
-            {children}
-          </motion.div>
-        )}
       </div>
 
       {/* Navigation Arrows - Now visible on mobile */}
