@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore, SCENES, SceneType } from '@/store/appStore'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react'
 
 interface SceneShellProps {
   children: React.ReactNode
@@ -19,168 +19,162 @@ const SceneShell = ({ children }: SceneShellProps) => {
   } = useAppStore()
   
   const [displayScene, setDisplayScene] = useState<SceneType>(currentScene)
+  const [transitionDirection, setTransitionDirection] = useState<'left' | 'right' | null>(null)
+  const [previousScene, setPreviousScene] = useState<SceneType | null>(null)
 
   // FSM для управления переходами между сценами
   useEffect(() => {
     if (isTransitioning) return
 
     if (displayScene !== currentScene) {
-      // Начинаем переход
-      setTransitioning(true)
-      setSceneState('out')
+      // Определяем направление перехода
+      const scenes = Object.keys(SCENES) as SceneType[]
+      const currentIndex = scenes.indexOf(currentScene)
+      const displayIndex = scenes.indexOf(displayScene)
+      const direction = currentIndex > displayIndex ? 'right' : 'left'
       
-      // После анимации выхода
+      setTransitionDirection(direction)
+      setPreviousScene(displayScene)
+      
+      // Начинаем переход - сразу меняем сцену и показываем новую
+      setTransitioning(true)
+      setDisplayScene(currentScene)
+      setSceneState('in')
+      
+      // После анимации входа
       setTimeout(() => {
-        setDisplayScene(currentScene)
-        setSceneState('in')
-        
-        // После анимации входа
-        setTimeout(() => {
-          setSceneState('ready')
-          setTransitioning(false)
-        }, 600)
-      }, 300)
+        setSceneState('ready')
+        setTransitioning(false)
+        setTransitionDirection(null)
+        setPreviousScene(null)
+      }, 400)
     }
   }, [currentScene, displayScene, isTransitioning, setSceneState, setTransitioning])
 
   // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isTransitioning) return
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (isTransitioning) return
 
-      const scenes = Object.keys(SCENES) as SceneType[]
-      const currentIndex = scenes.indexOf(currentScene)
+    const scenes = Object.keys(SCENES) as SceneType[]
+    const currentIndex = scenes.indexOf(currentScene)
 
-      switch (e.key) {
-        case 'ArrowLeft':
-          e.preventDefault()
-          if (currentIndex > 0) {
-            useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
-          }
-          break
-        case 'ArrowRight':
-          e.preventDefault()
-          if (currentIndex < scenes.length - 1) {
-            useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
-          }
-          break
-        case 'Enter':
-        case ' ':
-          e.preventDefault()
-          // Можно добавить логику для активации сцены
-          break
-      }
+    switch (e.key) {
+      case 'ArrowLeft':
+        e.preventDefault()
+        if (currentIndex > 0) {
+          setTransitionDirection('left')
+          useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
+        }
+        break
+      case 'ArrowRight':
+        e.preventDefault()
+        if (currentIndex < scenes.length - 1) {
+          setTransitionDirection('right')
+          useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
+        }
+        break
+      case 'Enter':
+      case ' ':
+        e.preventDefault()
+        // Можно добавить логику для активации сцены
+        break
     }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [currentScene, isTransitioning])
 
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleKeyDown])
+
   // Wheel navigation - Only for desktop devices
+  const handleWheel = useCallback((e: WheelEvent) => {
+    if (isTransitioning) return
+
+    e.preventDefault()
+
+    const scenes = Object.keys(SCENES) as SceneType[]
+    const currentIndex = scenes.indexOf(currentScene)
+
+    // Определяем направление скролла
+    const deltaY = e.deltaY
+    const threshold = 50 // Минимальное значение для срабатывания
+
+    if (Math.abs(deltaY) < threshold) return
+
+    if (deltaY > 0) {
+      // Скролл вниз - следующая сцена
+      if (currentIndex < scenes.length - 1) {
+        setTransitionDirection('right')
+        useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
+      }
+    } else {
+      // Скролл вверх - предыдущая сцена
+      if (currentIndex > 0) {
+        setTransitionDirection('left')
+        useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
+      }
+    }
+  }, [currentScene, isTransitioning])
+
   useEffect(() => {
     // Check if device is mobile/tablet
     const isMobileOrTablet = window.innerWidth < 768 || ('ontouchstart' in window)
     if (isMobileOrTablet) return
-
-    let wheelTimeout: NodeJS.Timeout | null = null
-    let isScrolling = false
-
-    const handleWheel = (e: WheelEvent) => {
-      if (isTransitioning || isScrolling) return
-
-      e.preventDefault()
-      isScrolling = true
-
-      const scenes = Object.keys(SCENES) as SceneType[]
-      const currentIndex = scenes.indexOf(currentScene)
-
-      // Определяем направление скролла
-      const deltaY = e.deltaY
-      const threshold = 50 // Минимальное значение для срабатывания
-
-      if (Math.abs(deltaY) < threshold) {
-        isScrolling = false
-        return
-      }
-
-      if (deltaY > 0) {
-        // Скролл вниз - следующая сцена
-        if (currentIndex < scenes.length - 1) {
-          useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
-        }
-      } else {
-        // Скролл вверх - предыдущая сцена
-        if (currentIndex > 0) {
-          useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
-        }
-      }
-
-      // Блокируем повторные срабатывания на 800ms
-      if (wheelTimeout) clearTimeout(wheelTimeout)
-      wheelTimeout = setTimeout(() => {
-        isScrolling = false
-      }, 800)
-    }
 
     // Добавляем passive: false для возможности preventDefault
     window.addEventListener('wheel', handleWheel, { passive: false })
     
     return () => {
       window.removeEventListener('wheel', handleWheel)
-      if (wheelTimeout) clearTimeout(wheelTimeout)
     }
-  }, [currentScene, isTransitioning])
+  }, [handleWheel])
 
   // Touch navigation for mobile and tablet devices (horizontal swipe)
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    if (isTransitioning) return
+    touchStartX.current = e.touches[0].clientX
+    isTouching.current = true
+  }, [isTransitioning])
+
+  const handleTouchEnd = useCallback((e: TouchEvent) => {
+    if (isTransitioning || !isTouching.current) return
+    
+    const touchEndX = e.changedTouches[0].clientX
+    const deltaX = touchStartX.current - touchEndX
+    const threshold = 50
+
+    if (Math.abs(deltaX) < threshold) {
+      isTouching.current = false
+      return
+    }
+
+    const scenes = Object.keys(SCENES) as SceneType[]
+    const currentIndex = scenes.indexOf(currentScene)
+
+    if (deltaX > 0) {
+      // Swipe left - next scene
+      if (currentIndex < scenes.length - 1) {
+        setTransitionDirection('right')
+        useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
+      }
+    } else {
+      // Swipe right - previous scene
+      if (currentIndex > 0) {
+        setTransitionDirection('left')
+        useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
+      }
+    }
+
+    isTouching.current = false
+  }, [currentScene, isTransitioning])
+
+  const touchStartX = useRef(0)
+  const isTouching = useRef(false)
+
   useEffect(() => {
     // Check if device is mobile/tablet
     const isMobileOrTablet = window.innerWidth < 768 || ('ontouchstart' in window)
     if (!isMobileOrTablet) return
-
-    let touchStartX = 0
-    let touchEndX = 0
-    let touchTimeout: NodeJS.Timeout | null = null
-    let isTouching = false
-
-    const handleTouchStart = (e: TouchEvent) => {
-      if (isTransitioning || isTouching) return
-      touchStartX = e.touches[0].clientX
-      isTouching = true
-    }
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (isTransitioning || !isTouching) return
-      
-      touchEndX = e.changedTouches[0].clientX
-      const deltaX = touchStartX - touchEndX
-      const threshold = 50
-
-      if (Math.abs(deltaX) < threshold) {
-        isTouching = false
-        return
-      }
-
-      const scenes = Object.keys(SCENES) as SceneType[]
-      const currentIndex = scenes.indexOf(currentScene)
-
-      if (deltaX > 0) {
-        // Swipe left - next scene
-        if (currentIndex < scenes.length - 1) {
-          useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
-        }
-      } else {
-        // Swipe right - previous scene
-        if (currentIndex > 0) {
-          useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
-        }
-      }
-
-      // Block repeated triggers for 800ms
-      if (touchTimeout) clearTimeout(touchTimeout)
-      touchTimeout = setTimeout(() => {
-        isTouching = false
-      }, 800)
-    }
 
     window.addEventListener('touchstart', handleTouchStart, { passive: true })
     window.addEventListener('touchend', handleTouchEnd, { passive: true })
@@ -188,34 +182,51 @@ const SceneShell = ({ children }: SceneShellProps) => {
     return () => {
       window.removeEventListener('touchstart', handleTouchStart)
       window.removeEventListener('touchend', handleTouchEnd)
-      if (touchTimeout) clearTimeout(touchTimeout)
     }
-  }, [currentScene, isTransitioning])
+  }, [handleTouchStart, handleTouchEnd])
 
-  const sceneVariants = {
-    idle: { opacity: 1, scale: 1, x: 0, y: 0 },
-    out: { 
-      opacity: 0, 
-      scale: 0.95, 
-      x: 50,
-      y: 0,
-      transition: { duration: 0.3, ease: 'easeIn' as const }
-    },
-    in: { 
-      opacity: 0, 
-      scale: 1.05, 
-      x: -50,
-      y: 0,
-      transition: { duration: 0.3, ease: 'easeOut' as const }
-    },
-    ready: { 
-      opacity: 1, 
-      scale: 1, 
-      x: 0,
-      y: 0,
-      transition: { duration: 0.3, ease: 'easeOut' as const }
+  const sceneVariants = useMemo(() => {
+    const isLeftTransition = transitionDirection === 'left'
+    
+    return {
+      idle: { 
+        opacity: 1, 
+        scale: 1, 
+        x: 0, 
+        y: 0 
+      },
+      out: { 
+        opacity: 1, 
+        scale: 1, 
+        x: isLeftTransition ? '100%' : '-100%', // Сдвигаем за пределы контейнера
+        y: 0,
+        transition: { 
+          duration: 0.4, 
+          ease: [0.25, 0.1, 0.25, 1] as const // Плавный выход
+        }
+      },
+      in: { 
+        opacity: 1, 
+        scale: 1, 
+        x: isLeftTransition ? '-100%' : '100%', // Начинаем с противоположной стороны
+        y: 0,
+        transition: { 
+          duration: 0.4, 
+          ease: [0.25, 0.1, 0.25, 1] as const // Плавный вход
+        }
+      },
+      ready: { 
+        opacity: 1, 
+        scale: 1, 
+        x: 0,
+        y: 0,
+        transition: { 
+          duration: 0.4, 
+          ease: [0.25, 0.1, 0.25, 1] as const
+        }
+      }
     }
-  }
+  }, [transitionDirection])
 
   return (
     <div className="relative w-full h-full overflow-hidden flex flex-col">
@@ -226,7 +237,14 @@ const SceneShell = ({ children }: SceneShellProps) => {
           {Object.entries(SCENES).map(([scene, config], index) => (
             <motion.button
               key={scene}
-              onClick={() => setCurrentScene(scene as SceneType)}
+              onClick={() => {
+                const scenes = Object.keys(SCENES) as SceneType[]
+                const currentIndex = scenes.indexOf(currentScene)
+                const targetIndex = scenes.indexOf(scene as SceneType)
+                const direction = targetIndex > currentIndex ? 'right' : 'left'
+                setTransitionDirection(direction)
+                setCurrentScene(scene as SceneType)
+              }}
               className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
                 currentScene === scene
                   ? 'bg-cyan-300 scale-125'
@@ -244,19 +262,58 @@ const SceneShell = ({ children }: SceneShellProps) => {
       </nav>
 
       {/* Scene Content */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={displayScene}
-          variants={sceneVariants}
-          initial="in"
-          animate={sceneState}
-          className={`w-full h-full overflow-hidden flex-1 ${
-            displayScene !== 'hero' ? 'md:max-w-6xl md:mx-auto' : ''
-          }`}
-        >
-          {children}
-        </motion.div>
-      </AnimatePresence>
+      <div 
+        className="relative w-full h-full overflow-hidden flex-1"
+        style={{
+          contain: 'layout style paint',
+          willChange: 'transform'
+        }}
+      >
+        <AnimatePresence>
+          <motion.div
+            key={displayScene}
+            variants={sceneVariants}
+            initial="in"
+            animate={sceneState}
+            exit="out"
+            className={`absolute inset-0 w-full h-full ${
+              displayScene !== 'hero' ? 'md:max-w-6xl md:mx-auto' : ''
+            }`}
+            style={{ 
+              willChange: 'transform',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)',
+              isolation: 'isolate',
+              zIndex: 10
+            }}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
+        
+        {/* Previous scene for smooth transition */}
+        {previousScene && isTransitioning && (
+          <motion.div
+            key={`prev-${previousScene}`}
+            variants={sceneVariants}
+            initial="ready"
+            animate="out"
+            className={`absolute inset-0 w-full h-full ${
+              previousScene !== 'hero' ? 'md:max-w-6xl md:mx-auto' : ''
+            }`}
+            style={{ 
+              willChange: 'transform',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)',
+              isolation: 'isolate',
+              zIndex: 5
+            }}
+          >
+            {/* Render previous scene content */}
+            {children}
+          </motion.div>
+        )}
+      </div>
 
       {/* Navigation Arrows - Now visible on mobile */}
       <div className="absolute top-1/2 left-2 sm:left-4 z-40" style={{ transform: 'translateY(-50%)' }}>
@@ -266,6 +323,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
             const scenes = Object.keys(SCENES) as SceneType[]
             const currentIndex = scenes.indexOf(currentScene)
             if (currentIndex > 0) {
+              setTransitionDirection('left')
               useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
             }
           }}
@@ -287,6 +345,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
             const scenes = Object.keys(SCENES) as SceneType[]
             const currentIndex = scenes.indexOf(currentScene)
             if (currentIndex < scenes.length - 1) {
+              setTransitionDirection('right')
               useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
             }
           }}
