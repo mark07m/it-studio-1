@@ -31,10 +31,10 @@ const PricingScene = () => {
   ]
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-8">
-      <div className="max-w-6xl w-full">
+    <div className="w-full h-full flex items-center justify-center p-4 overflow-hidden">
+      <div className="max-w-7xl w-full h-full flex flex-col justify-center">
         <motion.h2
-          className="text-5xl font-bold text-white text-center mb-16"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center mb-8"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -42,11 +42,11 @@ const PricingScene = () => {
           Pricing Plans
         </motion.h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 flex-1 max-h-[60vh] overflow-hidden">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.id}
-              className={`backdrop-blur-[16px] bg-white/10 border rounded-xl p-8 cursor-pointer transition-all duration-300 ${
+              className={`backdrop-blur-[16px] bg-white/10 border rounded-lg p-4 md:p-6 cursor-pointer transition-all duration-300 flex flex-col justify-between ${
                 selectedPlan === plan.id 
                   ? 'border-cyan-400/50 bg-white/20' 
                   : 'border-white/20 hover:bg-white/20'
@@ -58,34 +58,34 @@ const PricingScene = () => {
               onClick={() => setSelectedPlan(plan.id)}
             >
               <div className="text-center">
-                <div className={`w-16 h-16 mx-auto mb-4 rounded-lg bg-gradient-to-br ${plan.color} flex items-center justify-center text-white font-bold text-xl`}>
+                <div className={`w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 rounded-lg bg-gradient-to-br ${plan.color} flex items-center justify-center text-white font-bold text-lg md:text-xl`}>
                   {plan.name.charAt(0)}
                 </div>
-                <h3 className="text-2xl font-semibold text-white mb-2">
+                <h3 className="text-lg md:text-xl lg:text-2xl font-semibold text-white mb-2">
                   {plan.name}
                 </h3>
-                <div className="text-4xl font-bold text-white mb-6">
+                <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
                   {plan.price}
                 </div>
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-2 mb-4">
                   {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="text-white/70 text-sm">
+                    <li key={featureIndex} className="text-white/70 text-xs md:text-sm">
                       ✓ {feature}
                     </li>
                   ))}
                 </ul>
-                <motion.button
-                  className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 ${
-                    selectedPlan === plan.id
-                      ? 'bg-cyan-400 text-white'
-                      : 'bg-white/10 text-white border border-white/20 hover:bg-white/20'
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Choose Plan
-                </motion.button>
               </div>
+              <motion.button
+                className={`w-full py-2 md:py-3 rounded-lg font-semibold transition-all duration-300 text-sm md:text-base ${
+                  selectedPlan === plan.id
+                    ? 'bg-cyan-400 text-white'
+                    : 'bg-white/10 text-white border border-white/20 hover:bg-white/20'
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Choose Plan
+              </motion.button>
             </motion.div>
           ))}
         </div>

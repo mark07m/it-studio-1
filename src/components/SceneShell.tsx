@@ -76,6 +76,114 @@ const SceneShell = ({ children }: SceneShellProps) => {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [currentScene, isTransitioning])
 
+  // Wheel navigation
+  useEffect(() => {
+    let wheelTimeout: NodeJS.Timeout | null = null
+    let isScrolling = false
+
+    const handleWheel = (e: WheelEvent) => {
+      if (isTransitioning || isScrolling) return
+
+      e.preventDefault()
+      isScrolling = true
+
+      const scenes = Object.keys(SCENES) as SceneType[]
+      const currentIndex = scenes.indexOf(currentScene)
+
+      // Определяем направление скролла
+      const deltaY = e.deltaY
+      const threshold = 50 // Минимальное значение для срабатывания
+
+      if (Math.abs(deltaY) < threshold) {
+        isScrolling = false
+        return
+      }
+
+      if (deltaY > 0) {
+        // Скролл вниз - следующая сцена
+        if (currentIndex < scenes.length - 1) {
+          useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
+        }
+      } else {
+        // Скролл вверх - предыдущая сцена
+        if (currentIndex > 0) {
+          useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
+        }
+      }
+
+      // Блокируем повторные срабатывания на 800ms
+      if (wheelTimeout) clearTimeout(wheelTimeout)
+      wheelTimeout = setTimeout(() => {
+        isScrolling = false
+      }, 800)
+    }
+
+    // Добавляем passive: false для возможности preventDefault
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    
+    return () => {
+      window.removeEventListener('wheel', handleWheel)
+      if (wheelTimeout) clearTimeout(wheelTimeout)
+    }
+  }, [currentScene, isTransitioning])
+
+  // Touch navigation for mobile devices
+  useEffect(() => {
+    let touchStartY = 0
+    let touchEndY = 0
+    let touchTimeout: NodeJS.Timeout | null = null
+    let isTouching = false
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (isTransitioning || isTouching) return
+      touchStartY = e.touches[0].clientY
+      isTouching = true
+    }
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (isTransitioning || !isTouching) return
+      
+      touchEndY = e.changedTouches[0].clientY
+      const deltaY = touchStartY - touchEndY
+      const threshold = 50
+
+      if (Math.abs(deltaY) < threshold) {
+        isTouching = false
+        return
+      }
+
+      const scenes = Object.keys(SCENES) as SceneType[]
+      const currentIndex = scenes.indexOf(currentScene)
+
+      if (deltaY > 0) {
+        // Swipe up - next scene
+        if (currentIndex < scenes.length - 1) {
+          useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
+        }
+      } else {
+        // Swipe down - previous scene
+        if (currentIndex > 0) {
+          useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
+        }
+      }
+
+      // Block repeated triggers for 800ms
+      if (touchTimeout) clearTimeout(touchTimeout)
+      touchTimeout = setTimeout(() => {
+        isTouching = false
+      }, 800)
+    }
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true })
+    window.addEventListener('touchend', handleTouchEnd, { passive: true })
+    
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchend', handleTouchEnd)
+      if (touchTimeout) clearTimeout(touchTimeout)
+    }
+  }, [currentScene, isTransitioning])
+
   const sceneVariants = {
     idle: { opacity: 1, scale: 1, y: 0 },
     out: { 
@@ -185,6 +293,29 @@ const SceneShell = ({ children }: SceneShellProps) => {
           </p>
         </motion.div>
       </div>
+
+      {/* Scroll Hint */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-40"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1 }}
+      >
+        <div className="flex flex-col items-center space-y-2">
+          <motion.div
+            className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center"
+            animate={{ y: [0, 4, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <motion.div
+              className="w-1 h-3 bg-white/70 rounded-full mt-2"
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </motion.div>
+          <p className="text-white/60 text-xs">Scroll to navigate</p>
+        </div>
+      </motion.div>
     </div>
   )
 }

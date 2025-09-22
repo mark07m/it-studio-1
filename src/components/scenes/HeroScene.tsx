@@ -7,7 +7,7 @@ const HeroScene = () => {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <div className="w-full h-full flex items-center justify-center relative">
+    <div className="w-full h-full flex items-center justify-center relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -40,7 +40,7 @@ const HeroScene = () => {
       <div className="text-center z-10">
         {/* Animated Title */}
         <motion.h1
-          className="text-6xl md:text-8xl font-bold text-white mb-6"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: 'easeOut' }}
@@ -68,7 +68,7 @@ const HeroScene = () => {
 
         {/* Subtitle */}
         <motion.p
-          className="text-xl text-white/70 mb-12 max-w-2xl mx-auto"
+          className="text-sm sm:text-base md:text-lg lg:text-xl text-white/70 mb-8 max-w-2xl mx-auto px-4"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.8, ease: 'easeOut' }}

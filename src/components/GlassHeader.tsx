@@ -57,11 +57,11 @@ const GlassHeader = () => {
 
           {/* Navigation */}
           <nav className="flex items-center space-x-1">
-            {Object.entries(SCENES).map(([scene, config]) => (
+            {Object.entries(SCENES).map(([scene, config], index) => (
               <motion.button
                 key={scene}
                 onClick={() => handleSceneChange(scene as SceneType)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative ${
                   currentScene === scene
                     ? 'text-cyan-300 bg-cyan-400/30'
                     : 'text-white/80 hover:text-white hover:bg-white/20'
@@ -70,6 +70,19 @@ const GlassHeader = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 {config.title}
+                {/* Progress indicator */}
+                <motion.div
+                  className="absolute -bottom-1 left-0 h-0.5 bg-cyan-400"
+                  initial={{ width: 0 }}
+                  animate={{ 
+                    width: currentScene === scene ? '100%' : '0%' 
+                  }}
+                  transition={{ duration: 0.3 }}
+                />
+                {/* Scene number indicator */}
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-cyan-400/20 rounded-full flex items-center justify-center text-xs text-cyan-300">
+                  {index + 1}
+                </div>
               </motion.button>
             ))}
           </nav>

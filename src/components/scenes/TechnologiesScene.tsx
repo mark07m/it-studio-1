@@ -15,10 +15,10 @@ const TechnologiesScene = () => {
   ]
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-8">
-      <div className="max-w-6xl w-full">
+    <div className="w-full h-full flex items-center justify-center p-4 overflow-hidden">
+      <div className="max-w-7xl w-full h-full flex flex-col justify-center">
         <motion.h2
-          className="text-5xl font-bold text-white text-center mb-16"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center mb-8"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -26,11 +26,11 @@ const TechnologiesScene = () => {
           Technologies
         </motion.h2>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4 flex-1 max-h-[60vh] overflow-hidden">
           {technologies.map((tech, index) => (
             <motion.div
               key={tech.name}
-              className="backdrop-blur-[16px] bg-white/10 border border-white/20 rounded-xl p-6 text-center hover:bg-white/20 transition-all duration-300 cursor-pointer"
+              className="backdrop-blur-[16px] bg-white/10 border border-white/20 rounded-lg p-3 md:p-4 text-center hover:bg-white/20 transition-all duration-300 cursor-pointer flex flex-col justify-center"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
@@ -39,13 +39,13 @@ const TechnologiesScene = () => {
                 boxShadow: '0 0 30px rgba(0, 255, 255, 0.3)'
               }}
             >
-              <div className={`w-16 h-16 mx-auto mb-4 rounded-lg bg-gradient-to-br ${tech.color} flex items-center justify-center text-white font-bold text-lg`}>
+              <div className={`w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 mx-auto mb-2 md:mb-4 rounded-lg bg-gradient-to-br ${tech.color} flex items-center justify-center text-white font-bold text-sm md:text-base lg:text-lg`}>
                 {tech.name.charAt(0)}
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">
+              <h3 className="text-xs md:text-sm lg:text-base font-semibold text-white mb-1">
                 {tech.name}
               </h3>
-              <p className="text-white/70 text-sm">
+              <p className="text-white/70 text-xs">
                 {tech.category}
               </p>
             </motion.div>
