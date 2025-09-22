@@ -5,13 +5,14 @@ import GlassHeader from './GlassHeader'
 import GlassDock from './GlassDock'
 import DockTrigger from './DockTrigger'
 import SceneShell from './SceneShell'
+import App from './App'
 import { useAppStore } from '@/store/appStore'
 
 interface AppShellProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
-const AppShell = ({ children }: AppShellProps) => {
+const AppShell = () => {
   const { theme } = useAppStore()
   const [isDockVisible, setIsDockVisible] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
@@ -80,7 +81,7 @@ const AppShell = ({ children }: AppShellProps) => {
         <main className="flex-1 h-full">
           {/* note: backdrop-filter needs non-clipped background */}
           <SceneShell>
-            {children}
+            <App />
           </SceneShell>
         </main>
         
