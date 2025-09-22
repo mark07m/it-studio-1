@@ -306,30 +306,32 @@ const SceneShell = ({ children }: SceneShellProps) => {
         </motion.div>
       </div>
 
-      {/* Scroll Hint - Hidden on mobile */}
-      <motion.div
-        className="hidden md:block absolute bottom-8 left-1/2 z-40"
-        style={{ transform: 'translateX(-50%)' }}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1 }}
-      >
-        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
-        <div className="flex flex-col items-center space-y-2">
-          <motion.div
-            className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center"
-            animate={{ y: [0, 4, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          >
+      {/* Scroll Hint - Only show on Hero scene */}
+      {currentScene === 'hero' && (
+        <motion.div
+          className="hidden md:block absolute bottom-8 left-1/2 z-40"
+          style={{ transform: 'translateX(-50%)' }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+        >
+          {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
+          <div className="flex flex-col items-center space-y-2">
             <motion.div
-              className="w-1 h-3 bg-white/70 rounded-full mt-2"
-              animate={{ opacity: [0.3, 1, 0.3] }}
+              className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center"
+              animate={{ y: [0, 4, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            />
-          </motion.div>
-          <p className="text-white/60 text-xs">Scroll to navigate</p>
-        </div>
-      </motion.div>
+            >
+              <motion.div
+                className="w-1 h-3 bg-white/70 rounded-full mt-2"
+                animate={{ opacity: [0.3, 1, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              />
+            </motion.div>
+            <p className="text-white/60 text-xs">Scroll to navigate</p>
+          </div>
+        </motion.div>
+      )}
     </div>
   )
 }

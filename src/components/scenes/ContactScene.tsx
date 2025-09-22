@@ -68,12 +68,12 @@ const ContactScene = () => {
   }
 
   return (
-    <main className="w-full h-full flex items-center justify-center p-4 pt-20 sm:pt-24" role="main" aria-label="Contact section">
+    <main className="w-full h-full flex items-center justify-center p-4 pt-24 sm:pt-28 pb-8 lg:pb-12 overflow-y-auto" role="main" aria-label="Contact section">
       {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-6xl w-full h-full flex flex-col justify-center">
-        <header className="text-center mb-8">
+        <header className="text-center mb-4">
           <motion.h2
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${
+            className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold ${
               theme === 'dark' ? 'text-white' : 'text-gray-800'
             }`}
             initial={{ opacity: 0, y: 30 }}
@@ -94,11 +94,11 @@ const ContactScene = () => {
           </motion.p>
         </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 flex-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 flex-1">
           {/* note: backdrop-filter needs non-clipped background */}
           {/* Contact Info */}
           <motion.section
-            className="space-y-3 md:space-y-4"
+            className="space-y-2 md:space-y-3"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -171,7 +171,7 @@ const ContactScene = () => {
           {/* Contact Form */}
           <motion.form
             onSubmit={handleSubmit}
-            className="space-y-3 md:space-y-4"
+            className="space-y-2 md:space-y-3"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}

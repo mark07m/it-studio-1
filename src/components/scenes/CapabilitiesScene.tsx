@@ -45,12 +45,12 @@ const CapabilitiesScene = () => {
   ]
 
   return (
-    <main className="w-full h-full flex items-center justify-center p-4 pt-20 sm:pt-24" role="main" aria-label="Our capabilities section">
+    <main className="w-full h-full flex items-center justify-center p-4 pt-24 sm:pt-28 pb-8 lg:pb-12 overflow-y-auto" role="main" aria-label="Our capabilities section">
       {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-7xl w-full h-full flex flex-col justify-center">
-        <header className="text-center mb-8">
+        <header className="text-center mb-4">
           <motion.h2
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${
+            className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold ${
               theme === 'dark' ? 'text-white' : 'text-gray-800'
             }`}
             initial={{ opacity: 0, y: 30 }}
@@ -72,14 +72,14 @@ const CapabilitiesScene = () => {
         </header>
         
         <section 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 flex-1"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 flex-1"
           aria-label="Capabilities list"
         >
           {/* note: backdrop-filter needs non-clipped background */}
           {capabilities.map((capability, index) => (
             <motion.article
               key={capability.title}
-              className="glass p-3 md:p-4 transition-all duration-300 cursor-pointer flex flex-col hover:glass-dark"
+              className="glass p-2 md:p-3 transition-all duration-300 cursor-pointer flex flex-col hover:glass-dark"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
