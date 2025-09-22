@@ -34,11 +34,7 @@ const GlassHeader = () => {
         transition={{ duration: 0.8, ease: 'easeOut' }}
         className="fixed top-2 sm:top-4 left-2 right-2 sm:left-4 sm:right-4 z-50 h-14 sm:h-16"
       >
-        <div className={`h-full w-full backdrop-blur-[16px] rounded-2xl ${
-          theme === 'dark' 
-            ? 'bg-white/10 border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.5)] shadow-[inset_0_1px_0_rgba(0,255,255,0.5)]'
-            : 'bg-white/70 border-gray-200/50 shadow-[0_8px_32px_rgba(0,0,0,0.1)] shadow-[inset_0_1px_0_rgba(0,0,0,0.1)]'
-        } border`}>
+        <div className="glass h-full w-full">
           <div className="h-full flex items-center justify-between px-3 sm:px-6">
             {/* Logo */}
             <motion.div
@@ -245,11 +241,7 @@ const GlassHeader = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className={`fixed top-16 left-2 right-2 z-50 backdrop-blur-[16px] rounded-2xl ${
-              theme === 'dark'
-                ? 'bg-white/10 border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
-                : 'bg-white/70 border-gray-200/50 shadow-[0_8px_32px_rgba(0,0,0,0.1)]'
-            } border`}
+            className="glass fixed top-16 left-2 right-2 z-50"
           >
             <div className="p-4">
               {/* Mobile Navigation */}

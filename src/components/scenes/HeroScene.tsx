@@ -9,7 +9,8 @@ const HeroScene = () => {
   const { theme } = useAppStore()
 
   return (
-    <div className="w-full h-full flex items-center justify-center relative overflow-hidden p-4">
+    <div className="w-full h-full flex items-center justify-center relative p-4">
+      {/* note: backdrop-filter needs non-clipped background */}
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -84,11 +85,7 @@ const HeroScene = () => {
 
         {/* CTA Button */}
         <motion.button
-          className={`px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 backdrop-blur-[16px] border rounded-xl font-semibold text-sm sm:text-base md:text-lg transition-all duration-300 ${
-            theme === 'dark'
-              ? 'bg-white/10 border-cyan-400/50 text-white hover:bg-white/20 shadow-[0_0_30px_rgba(0,255,255,0.4)]'
-              : 'bg-white/70 border-cyan-500/50 text-gray-800 hover:bg-white/90 shadow-[0_0_30px_rgba(0,255,255,0.2)]'
-          }`}
+          className="glass px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-xl font-semibold text-sm sm:text-base md:text-lg transition-all duration-300 hover:glass-dark ring-2 ring-cyan-400/50 shadow-[0_0_30px_rgba(0,255,255,0.4)]"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}

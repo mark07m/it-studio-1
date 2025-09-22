@@ -22,11 +22,7 @@ const GlassDock = () => {
       transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
       className="fixed bottom-2 sm:bottom-4 left-2 right-2 sm:left-4 sm:right-4 z-50 h-16 sm:h-20"
     >
-      <div className={`h-full w-full sm:w-[22%] backdrop-blur-[16px] rounded-2xl mx-auto ${
-        theme === 'dark'
-          ? 'bg-white/10 border-white/30 shadow-[0_-8px_32px_rgba(0,0,0,0.5)]'
-          : 'bg-white/70 border-gray-200/50 shadow-[0_-8px_32px_rgba(0,0,0,0.1)]'
-      } border`}>
+      <div className="glass h-full w-full sm:w-[22%] mx-auto">
         <div className="h-full flex items-center justify-center px-2 sm:px-6">
           <div className="flex items-center justify-between sm:justify-center w-full sm:w-auto space-x-1 sm:space-x-4">
             {dockItems.map((item) => (

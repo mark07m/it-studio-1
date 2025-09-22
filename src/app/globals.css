@@ -104,6 +104,55 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
   }
 }
 
+/* === GLASS EFFECT (using tailwindcss-glassmorphism) === */
+/* Теперь используем готовые классы из библиотеки:
+   - .glass - основной glass эффект
+   - .glass-dark - темная версия
+   - .glass-card - для карточек
+*/
+
+/* Fallback, когда нет backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass { 
+    background: rgba(255,255,255,0.75) !important; 
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important; 
+  }
+  .dark .glass { 
+    background: rgba(20,20,20,0.75) !important; 
+  }
+}
+
+/* Mobile optimization: reduce blur for better performance */
+@media (max-width: 768px) {
+  .glass {
+    backdrop-filter: blur(16px) saturate(140%) contrast(105%) brightness(105%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(140%) contrast(105%) brightness(105%) !important;
+    will-change: auto !important; /* Reduce will-change on mobile for better performance */
+  }
+}
+
+/* Performance optimization: limit will-change to main glass panels only */
+.glass {
+  will-change: backdrop-filter;
+}
+
+/* Safari/iOS specific optimizations */
+@supports (-webkit-backdrop-filter: blur(1px)) {
+  .glass {
+    /* Force hardware acceleration on Safari */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    /* Дополнительная оптимизация для Safari */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+/* A11y: reduce transparency */
+@media (prefers-reduced-transparency: reduce) {
+  .glass, .glass::after { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; opacity: 1 !important; }
+}
+
 /* Neon glow utilities */
 .neon-glow {
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
@@ -125,4 +174,74 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
 
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Background animations */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(20px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-15px, 20px) scale(0.9);
+  }
+}
+
+@keyframes float-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(-25px, 15px) scale(1.2);
+  }
+  50% {
+    transform: translate(30px, -20px) scale(0.8);
+  }
+  75% {
+    transform: translate(-10px, -25px) scale(1.1);
+  }
+}
+
+@keyframes drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
+.animate-float-1 {
+  animation: float-1 12s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float-2 15s ease-in-out infinite;
+}
+
+.animate-drift {
+  animation: drift 20s linear infinite;
+}
+
+@layer components {
+  .glass { @apply rounded-2xl border; }
+  .glass-header { @apply rounded-2xl; }
+  .glass-dock { @apply rounded-2xl; }
 }

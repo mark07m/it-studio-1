@@ -19,7 +19,8 @@ const ContactScene = () => {
   }
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-4 overflow-hidden">
+    <div className="w-full h-full flex items-center justify-center p-4">
+      {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-6xl w-full h-full flex flex-col justify-center">
         <motion.h2
           className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 ${
@@ -32,7 +33,8 @@ const ContactScene = () => {
           Get In Touch
         </motion.h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 flex-1 max-h-[60vh] overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 flex-1 max-h-[60vh] overflow-y-auto">
+          {/* note: backdrop-filter needs non-clipped background */}
           {/* Contact Info */}
           <motion.div
             className="space-y-4 md:space-y-6"
@@ -112,11 +114,7 @@ const ContactScene = () => {
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className={`w-full px-3 py-2 md:px-4 md:py-3 backdrop-blur-[16px] rounded-lg focus:outline-none transition-all duration-300 text-sm md:text-base ${
-                  theme === 'dark'
-                    ? 'bg-white/10 border-white/20 text-white placeholder-white/50 focus:border-cyan-400/50'
-                    : 'bg-white/70 border-gray-200/50 text-gray-800 placeholder-gray-500 focus:border-cyan-500/50'
-                } border`}
+                className={`w-full px-3 py-2 md:px-4 md:py-3 glass focus:outline-none transition-all duration-300 text-sm md:text-base focus:ring-2 focus:ring-cyan-400/50`}
                 placeholder="Your name"
                 required
               />
@@ -130,11 +128,7 @@ const ContactScene = () => {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className={`w-full px-3 py-2 md:px-4 md:py-3 backdrop-blur-[16px] rounded-lg focus:outline-none transition-all duration-300 text-sm md:text-base ${
-                  theme === 'dark'
-                    ? 'bg-white/10 border-white/20 text-white placeholder-white/50 focus:border-cyan-400/50'
-                    : 'bg-white/70 border-gray-200/50 text-gray-800 placeholder-gray-500 focus:border-cyan-500/50'
-                } border`}
+                className={`w-full px-3 py-2 md:px-4 md:py-3 glass focus:outline-none transition-all duration-300 text-sm md:text-base focus:ring-2 focus:ring-cyan-400/50`}
                 placeholder="your@email.com"
                 required
               />
@@ -151,7 +145,7 @@ const ContactScene = () => {
                 className={`w-full px-3 py-2 md:px-4 md:py-3 backdrop-blur-[16px] rounded-lg focus:outline-none transition-all duration-300 resize-none text-sm md:text-base ${
                   theme === 'dark'
                     ? 'bg-white/10 border-white/20 text-white placeholder-white/50 focus:border-cyan-400/50'
-                    : 'bg-white/70 border-gray-200/50 text-gray-800 placeholder-gray-500 focus:border-cyan-500/50'
+                    : 'bg-white/25 border-gray-200/50 text-gray-800 placeholder-gray-500 focus:border-cyan-500/50'
                 } border`}
                 placeholder="Tell us about your project..."
                 required

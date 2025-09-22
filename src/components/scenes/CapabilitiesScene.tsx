@@ -15,7 +15,8 @@ const CapabilitiesScene = () => {
   ]
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-4 overflow-hidden">
+    <div className="w-full h-full flex items-center justify-center p-4">
+      {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-7xl w-full h-full flex flex-col justify-center">
         <motion.h2
           className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 ${
@@ -28,15 +29,12 @@ const CapabilitiesScene = () => {
           Our Capabilities
         </motion.h2>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6 flex-1 max-h-[60vh] overflow-hidden">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6 flex-1 max-h-[60vh] overflow-y-auto">
+          {/* note: backdrop-filter needs non-clipped background */}
           {capabilities.map((capability, index) => (
             <motion.div
               key={capability.title}
-              className={`backdrop-blur-[16px] rounded-lg p-3 md:p-4 lg:p-6 transition-all duration-300 cursor-pointer flex flex-col justify-center ${
-                theme === 'dark'
-                  ? 'bg-white/10 border-white/20 hover:bg-white/20'
-                  : 'bg-white/70 border-gray-200/50 hover:bg-white/90'
-              } border`}
+              className="glass p-3 md:p-4 lg:p-6 transition-all duration-300 cursor-pointer flex flex-col justify-center hover:glass-dark"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}

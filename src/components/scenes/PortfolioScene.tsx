@@ -13,7 +13,8 @@ const PortfolioScene = () => {
   ]
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-4 overflow-hidden">
+    <div className="w-full h-full flex items-center justify-center p-4">
+      {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-7xl w-full h-full flex flex-col justify-center">
         <motion.h2
           className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 ${
@@ -26,15 +27,12 @@ const PortfolioScene = () => {
           Our Portfolio
         </motion.h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 flex-1 max-h-[60vh] overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 flex-1 max-h-[60vh] overflow-y-auto">
+          {/* note: backdrop-filter needs non-clipped background */}
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
-              className={`backdrop-blur-[16px] rounded-lg p-4 md:p-6 transition-all duration-300 cursor-pointer flex flex-col justify-between ${
-                theme === 'dark'
-                  ? 'bg-white/10 border-white/20 hover:bg-white/20'
-                  : 'bg-white/70 border-gray-200/50 hover:bg-white/90'
-              } border`}
+              className="glass p-4 md:p-6 transition-all duration-300 cursor-pointer flex flex-col justify-between hover:glass-dark"
               initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}

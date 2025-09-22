@@ -209,7 +209,8 @@ const SceneShell = ({ children }: SceneShellProps) => {
   return (
     <div className="relative w-full h-full overflow-hidden">
       {/* Dot Navigation */}
-      <div className="absolute top-4 sm:top-6 left-1/2 transform -translate-x-1/2 z-40">
+      <div className="absolute top-4 sm:top-6 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }}>
+        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
         <div className="flex space-x-2">
           {Object.entries(SCENES).map(([scene]) => (
             <motion.button
@@ -241,7 +242,8 @@ const SceneShell = ({ children }: SceneShellProps) => {
       </AnimatePresence>
 
       {/* Navigation Arrows - Hidden on mobile */}
-      <div className="hidden md:block absolute top-1/2 left-4 transform -translate-y-1/2 z-40">
+      <div className="hidden md:block absolute top-1/2 left-4 z-40" style={{ transform: 'translateY(-50%)' }}>
+        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
         <motion.button
           onClick={() => {
             const scenes = Object.keys(SCENES) as SceneType[]
@@ -250,7 +252,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
               useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
             }
           }}
-          className="w-12 h-12 rounded-full backdrop-blur-[16px] bg-white/15 border border-white/30 flex items-center justify-center text-white hover:bg-white/25 transition-all duration-300"
+          className="glass w-12 h-12 rounded-full flex items-center justify-center text-white hover:glass-dark transition-all duration-300"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           disabled={isTransitioning}
@@ -259,7 +261,8 @@ const SceneShell = ({ children }: SceneShellProps) => {
         </motion.button>
       </div>
 
-      <div className="hidden md:block absolute top-1/2 right-4 transform -translate-y-1/2 z-40">
+      <div className="hidden md:block absolute top-1/2 right-4 z-40" style={{ transform: 'translateY(-50%)' }}>
+        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
         <motion.button
           onClick={() => {
             const scenes = Object.keys(SCENES) as SceneType[]
@@ -268,7 +271,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
               useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
             }
           }}
-          className="w-12 h-12 rounded-full backdrop-blur-[16px] bg-white/15 border border-white/30 flex items-center justify-center text-white hover:bg-white/25 transition-all duration-300"
+          className="glass w-12 h-12 rounded-full flex items-center justify-center text-white hover:glass-dark transition-all duration-300"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           disabled={isTransitioning}
@@ -278,9 +281,10 @@ const SceneShell = ({ children }: SceneShellProps) => {
       </div>
 
       {/* Scene Info */}
-      <div className="absolute bottom-16 sm:bottom-20 left-1/2 transform -translate-x-1/2 z-40">
+      <div className="absolute bottom-16 sm:bottom-20 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }}>
+        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
         <motion.div
-          className="backdrop-blur-[16px] bg-white/15 border border-white/30 rounded-lg px-3 sm:px-4 py-2"
+          className="glass rounded-lg px-3 sm:px-4 py-2"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
@@ -296,11 +300,13 @@ const SceneShell = ({ children }: SceneShellProps) => {
 
       {/* Scroll Hint - Hidden on mobile */}
       <motion.div
-        className="hidden md:block absolute bottom-8 left-1/2 transform -translate-x-1/2 z-40"
+        className="hidden md:block absolute bottom-8 left-1/2 z-40"
+        style={{ transform: 'translateX(-50%)' }}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1 }}
       >
+        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
         <div className="flex flex-col items-center space-y-2">
           <motion.div
             className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center"
