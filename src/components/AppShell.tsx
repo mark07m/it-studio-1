@@ -15,9 +15,15 @@ const AppShell = ({ children }: AppShellProps) => {
   return (
     <div className={`h-screen w-full overflow-hidden ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
       {/* Background Pattern */}
-      <div className="fixed inset-0 opacity-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,255,255,0.1),transparent_50%)]" />
+      <div className={`fixed inset-0 ${theme === 'dark' ? 'opacity-20' : 'opacity-30'}`}>
+        <div className={`absolute inset-0 ${theme === 'dark' 
+          ? 'bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10' 
+          : 'bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20'
+        }`} />
+        <div className={`absolute inset-0 ${theme === 'dark'
+          ? 'bg-[radial-gradient(circle_at_50%_50%,rgba(0,255,255,0.1),transparent_50%)]'
+          : 'bg-[radial-gradient(circle_at_50%_50%,rgba(0,255,255,0.2),transparent_50%)]'
+        }`} />
       </div>
 
       {/* App Shell */}

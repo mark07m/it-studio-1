@@ -2,9 +2,11 @@
 
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import { useAppStore } from '@/store/appStore'
 
 const PricingScene = () => {
   const [selectedPlan, setSelectedPlan] = useState('standard')
+  const { theme } = useAppStore()
 
   const plans = [
     { 
@@ -34,7 +36,9 @@ const PricingScene = () => {
     <div className="w-full h-full flex items-center justify-center p-4 overflow-hidden">
       <div className="max-w-7xl w-full h-full flex flex-col justify-center">
         <motion.h2
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center mb-8"
+          className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-800'
+          }`}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -46,11 +50,15 @@ const PricingScene = () => {
           {plans.map((plan, index) => (
             <motion.div
               key={plan.id}
-              className={`backdrop-blur-[16px] bg-white/10 border rounded-lg p-4 md:p-6 cursor-pointer transition-all duration-300 flex flex-col justify-between ${
+              className={`backdrop-blur-[16px] rounded-lg p-4 md:p-6 cursor-pointer transition-all duration-300 flex flex-col justify-between ${
                 selectedPlan === plan.id 
-                  ? 'border-cyan-400/50 bg-white/20' 
-                  : 'border-white/20 hover:bg-white/20'
-              }`}
+                  ? theme === 'dark'
+                    ? 'border-cyan-400/50 bg-white/20'
+                    : 'border-cyan-500/50 bg-white/90'
+                  : theme === 'dark'
+                    ? 'border-white/20 hover:bg-white/20'
+                    : 'border-gray-200/50 hover:bg-white/90'
+              } border`}
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
@@ -61,15 +69,21 @@ const PricingScene = () => {
                 <div className={`w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 rounded-lg bg-gradient-to-br ${plan.color} flex items-center justify-center text-white font-bold text-lg md:text-xl`}>
                   {plan.name.charAt(0)}
                 </div>
-                <h3 className="text-lg md:text-xl lg:text-2xl font-semibold text-white mb-2">
+                <h3 className={`text-lg md:text-xl lg:text-2xl font-semibold mb-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-800'
+                }`}>
                   {plan.name}
                 </h3>
-                <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
+                <div className={`text-2xl md:text-3xl lg:text-4xl font-bold mb-4 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-800'
+                }`}>
                   {plan.price}
                 </div>
                 <ul className="space-y-2 mb-4">
                   {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="text-white/70 text-xs md:text-sm">
+                    <li key={featureIndex} className={`text-xs md:text-sm ${
+                      theme === 'dark' ? 'text-white/70' : 'text-gray-600'
+                    }`}>
                       ✓ {feature}
                     </li>
                   ))}
@@ -79,8 +93,10 @@ const PricingScene = () => {
                 className={`w-full py-2 md:py-3 rounded-lg font-semibold transition-all duration-300 text-sm md:text-base ${
                   selectedPlan === plan.id
                     ? 'bg-cyan-400 text-white'
-                    : 'bg-white/10 text-white border border-white/20 hover:bg-white/20'
-                }`}
+                    : theme === 'dark'
+                      ? 'bg-white/10 text-white border-white/20 hover:bg-white/20'
+                      : 'bg-white/70 text-gray-800 border-gray-300 hover:bg-white/90'
+                } border`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

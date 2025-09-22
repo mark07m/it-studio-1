@@ -2,9 +2,11 @@
 
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import { useAppStore } from '@/store/appStore'
 
 const GlassDock = () => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
+  const { theme } = useAppStore()
 
   const dockItems = [
     { id: 'cases', icon: '📁', label: 'Cases', color: 'from-blue-400 to-cyan-500' },
@@ -20,7 +22,11 @@ const GlassDock = () => {
       transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
       className="fixed bottom-2 sm:bottom-4 left-2 right-2 sm:left-4 sm:right-4 z-50 h-16 sm:h-20"
     >
-      <div className="h-full w-full sm:w-[22%] backdrop-blur-[16px] bg-white/10 border border-white/30 rounded-2xl mx-auto shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
+      <div className={`h-full w-full sm:w-[22%] backdrop-blur-[16px] rounded-2xl mx-auto ${
+        theme === 'dark'
+          ? 'bg-white/10 border-white/30 shadow-[0_-8px_32px_rgba(0,0,0,0.5)]'
+          : 'bg-white/70 border-gray-200/50 shadow-[0_-8px_32px_rgba(0,0,0,0.1)]'
+      } border`}>
         <div className="h-full flex items-center justify-center px-2 sm:px-6">
           <div className="flex items-center justify-between sm:justify-center w-full sm:w-auto space-x-1 sm:space-x-4">
             {dockItems.map((item) => (
@@ -45,7 +51,9 @@ const GlassDock = () => {
                   {item.icon}
                 </motion.div>
                 <motion.span
-                  className="text-white/80 text-xs font-medium text-center"
+                  className={`text-xs font-medium text-center ${
+                    theme === 'dark' ? 'text-white/80' : 'text-gray-600'
+                  }`}
                   animate={{
                     opacity: hoveredItem === item.id ? 1 : 0.8,
                     y: hoveredItem === item.id ? -2 : 0

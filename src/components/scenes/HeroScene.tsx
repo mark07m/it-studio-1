@@ -2,9 +2,11 @@
 
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import { useAppStore } from '@/store/appStore'
 
 const HeroScene = () => {
   const [isHovered, setIsHovered] = useState(false)
+  const { theme } = useAppStore()
 
   return (
     <div className="w-full h-full flex items-center justify-center relative overflow-hidden p-4">
@@ -40,7 +42,9 @@ const HeroScene = () => {
       <div className="text-center z-10 max-w-4xl mx-auto">
         {/* Animated Title */}
         <motion.h1
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-white mb-2 sm:mb-4 leading-tight"
+          className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold mb-2 sm:mb-4 leading-tight ${
+            theme === 'dark' ? 'text-white' : 'text-gray-800'
+          }`}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: 'easeOut' }}
@@ -68,7 +72,9 @@ const HeroScene = () => {
 
         {/* Subtitle */}
         <motion.p
-          className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 mb-4 sm:mb-6 md:mb-8 max-w-xl mx-auto px-2"
+          className={`text-xs sm:text-sm md:text-base lg:text-lg mb-4 sm:mb-6 md:mb-8 max-w-xl mx-auto px-2 ${
+            theme === 'dark' ? 'text-white/70' : 'text-gray-600'
+          }`}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.8, ease: 'easeOut' }}
@@ -78,13 +84,19 @@ const HeroScene = () => {
 
         {/* CTA Button */}
         <motion.button
-          className="px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 backdrop-blur-[16px] bg-white/10 border border-cyan-400/50 rounded-xl text-white font-semibold text-sm sm:text-base md:text-lg hover:bg-white/20 transition-all duration-300 shadow-[0_0_30px_rgba(0,255,255,0.4)]"
+          className={`px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 backdrop-blur-[16px] border rounded-xl font-semibold text-sm sm:text-base md:text-lg transition-all duration-300 ${
+            theme === 'dark'
+              ? 'bg-white/10 border-cyan-400/50 text-white hover:bg-white/20 shadow-[0_0_30px_rgba(0,255,255,0.4)]'
+              : 'bg-white/70 border-cyan-500/50 text-gray-800 hover:bg-white/90 shadow-[0_0_30px_rgba(0,255,255,0.2)]'
+          }`}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
           whileHover={{ 
             scale: 1.05,
-            boxShadow: '0 0 40px rgba(0, 255, 255, 0.6)'
+            boxShadow: theme === 'dark' 
+              ? '0 0 40px rgba(0, 255, 255, 0.6)'
+              : '0 0 40px rgba(0, 255, 255, 0.3)'
           }}
           whileTap={{ scale: 0.95 }}
           onHoverStart={() => setIsHovered(true)}

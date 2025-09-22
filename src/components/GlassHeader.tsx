@@ -34,7 +34,11 @@ const GlassHeader = () => {
         transition={{ duration: 0.8, ease: 'easeOut' }}
         className="fixed top-2 sm:top-4 left-2 right-2 sm:left-4 sm:right-4 z-50 h-14 sm:h-16"
       >
-        <div className="h-full w-full backdrop-blur-[16px] bg-white/10 border border-white/30 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] shadow-[inset_0_1px_0_rgba(0,255,255,0.5)]">
+        <div className={`h-full w-full backdrop-blur-[16px] rounded-2xl ${
+          theme === 'dark' 
+            ? 'bg-white/10 border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.5)] shadow-[inset_0_1px_0_rgba(0,255,255,0.5)]'
+            : 'bg-white/70 border-gray-200/50 shadow-[0_8px_32px_rgba(0,0,0,0.1)] shadow-[inset_0_1px_0_rgba(0,0,0,0.1)]'
+        } border`}>
           <div className="h-full flex items-center justify-between px-3 sm:px-6">
             {/* Logo */}
             <motion.div
@@ -55,7 +59,9 @@ const GlassHeader = () => {
               >
                 <span className="text-white font-bold text-xs sm:text-sm">IT</span>
               </motion.div>
-              <span className="text-white font-semibold text-sm sm:text-lg">Studio</span>
+              <span className={`font-semibold text-sm sm:text-lg ${
+                theme === 'dark' ? 'text-white' : 'text-gray-800'
+              }`}>Studio</span>
             </motion.div>
 
             {/* Desktop Navigation */}
@@ -66,8 +72,12 @@ const GlassHeader = () => {
                   onClick={() => handleSceneChange(scene as SceneType)}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative ${
                     currentScene === scene
-                      ? 'text-cyan-300 bg-cyan-400/30'
-                      : 'text-white/80 hover:text-white hover:bg-white/20'
+                      ? theme === 'dark' 
+                        ? 'text-cyan-300 bg-cyan-400/30'
+                        : 'text-cyan-600 bg-cyan-100/50'
+                      : theme === 'dark'
+                        ? 'text-white/80 hover:text-white hover:bg-white/20'
+                        : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
                   }`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -75,7 +85,9 @@ const GlassHeader = () => {
                   {config.title}
                   {/* Progress indicator */}
                   <motion.div
-                    className="absolute -bottom-1 left-0 h-0.5 bg-cyan-400"
+                    className={`absolute -bottom-1 left-0 h-0.5 ${
+                      theme === 'dark' ? 'bg-cyan-400' : 'bg-cyan-500'
+                    }`}
                     initial={{ width: 0 }}
                     animate={{ 
                       width: currentScene === scene ? '100%' : '0%' 
@@ -83,7 +95,11 @@ const GlassHeader = () => {
                     transition={{ duration: 0.3 }}
                   />
                   {/* Scene number indicator */}
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-cyan-400/20 rounded-full flex items-center justify-center text-xs text-cyan-300">
+                  <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-xs ${
+                    theme === 'dark' 
+                      ? 'bg-cyan-400/20 text-cyan-300'
+                      : 'bg-cyan-100 text-cyan-600'
+                  }`}>
                     {index + 1}
                   </div>
                 </motion.button>
@@ -95,7 +111,11 @@ const GlassHeader = () => {
               {/* Sound Toggle */}
               <motion.button
                 onClick={toggleSound}
-                className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300"
+                className={`p-2 rounded-lg transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'text-white/80 hover:text-white hover:bg-white/20'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
+                }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -105,7 +125,11 @@ const GlassHeader = () => {
               {/* Theme Toggle */}
               <motion.button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300"
+                className={`p-2 rounded-lg transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'text-white/80 hover:text-white hover:bg-white/20'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
+                }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -115,7 +139,11 @@ const GlassHeader = () => {
               {/* Language Toggle */}
               <motion.button
                 onClick={toggleLanguage}
-                className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300"
+                className={`p-2 rounded-lg transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'text-white/80 hover:text-white hover:bg-white/20'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
+                }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -125,7 +153,11 @@ const GlassHeader = () => {
               {/* CmdK */}
               <motion.button
                 onClick={toggleCmdK}
-                className="px-2 sm:px-3 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300 border border-white/30 text-xs sm:text-sm"
+                className={`px-2 sm:px-3 py-2 rounded-lg transition-all duration-300 text-xs sm:text-sm ${
+                  theme === 'dark'
+                    ? 'text-white/80 hover:text-white hover:bg-white/20 border-white/30'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50 border-gray-300'
+                } border`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -149,7 +181,11 @@ const GlassHeader = () => {
               {/* Essential controls only on mobile */}
               <motion.button
                 onClick={toggleSound}
-                className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300"
+                className={`p-2 rounded-lg transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'text-white/80 hover:text-white hover:bg-white/20'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
+                }`}
                 whileTap={{ scale: 0.9 }}
               >
                 {soundEnabled ? '🔊' : '🔇'}
@@ -157,7 +193,11 @@ const GlassHeader = () => {
 
               <motion.button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300"
+                className={`p-2 rounded-lg transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'text-white/80 hover:text-white hover:bg-white/20'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
+                }`}
                 whileTap={{ scale: 0.9 }}
               >
                 {theme === 'dark' ? '🌙' : '☀️'}
@@ -166,7 +206,11 @@ const GlassHeader = () => {
               {/* Mobile Menu Button */}
               <motion.button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300"
+                className={`p-2 rounded-lg transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'text-white/80 hover:text-white hover:bg-white/20'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
+                }`}
                 whileTap={{ scale: 0.9 }}
               >
                 <div className="w-5 h-5 flex flex-col justify-center space-y-1">
@@ -201,7 +245,11 @@ const GlassHeader = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="fixed top-16 left-2 right-2 z-50 backdrop-blur-[16px] bg-white/10 border border-white/30 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+            className={`fixed top-16 left-2 right-2 z-50 backdrop-blur-[16px] rounded-2xl ${
+              theme === 'dark'
+                ? 'bg-white/10 border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
+                : 'bg-white/70 border-gray-200/50 shadow-[0_8px_32px_rgba(0,0,0,0.1)]'
+            } border`}
           >
             <div className="p-4">
               {/* Mobile Navigation */}
@@ -212,18 +260,28 @@ const GlassHeader = () => {
                     onClick={() => handleSceneChange(scene as SceneType)}
                     className={`w-full flex items-center justify-between p-3 rounded-lg text-sm font-medium transition-all duration-300 ${
                       currentScene === scene
-                        ? 'text-cyan-300 bg-cyan-400/30'
-                        : 'text-white/80 hover:text-white hover:bg-white/20'
+                        ? theme === 'dark'
+                          ? 'text-cyan-300 bg-cyan-400/30'
+                          : 'text-cyan-600 bg-cyan-100/50'
+                        : theme === 'dark'
+                          ? 'text-white/80 hover:text-white hover:bg-white/20'
+                          : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
                     }`}
                     whileTap={{ scale: 0.98 }}
                   >
                     <span>{config.title}</span>
                     <div className="flex items-center space-x-2">
-                      <div className="w-6 h-6 bg-cyan-400/20 rounded-full flex items-center justify-center text-xs text-cyan-300">
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                        theme === 'dark'
+                          ? 'bg-cyan-400/20 text-cyan-300'
+                          : 'bg-cyan-100 text-cyan-600'
+                      }`}>
                         {index + 1}
                       </div>
                       {currentScene === scene && (
-                        <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                        <div className={`w-2 h-2 rounded-full ${
+                          theme === 'dark' ? 'bg-cyan-400' : 'bg-cyan-500'
+                        }`} />
                       )}
                     </div>
                   </motion.button>
@@ -235,7 +293,11 @@ const GlassHeader = () => {
                 <div className="flex items-center justify-between">
                   <motion.button
                     onClick={toggleLanguage}
-                    className="px-3 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300"
+                    className={`px-3 py-2 rounded-lg transition-all duration-300 ${
+                      theme === 'dark'
+                        ? 'text-white/80 hover:text-white hover:bg-white/20'
+                        : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
+                    }`}
                     whileTap={{ scale: 0.95 }}
                   >
                     {language === 'en' ? 'English' : 'Русский'}
@@ -243,7 +305,11 @@ const GlassHeader = () => {
 
                   <motion.button
                     onClick={toggleCmdK}
-                    className="px-3 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300 border border-white/30"
+                    className={`px-3 py-2 rounded-lg transition-all duration-300 ${
+                      theme === 'dark'
+                        ? 'text-white/80 hover:text-white hover:bg-white/20 border-white/30'
+                        : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50 border-gray-300'
+                    } border`}
                     whileTap={{ scale: 0.95 }}
                   >
                     ⌘K

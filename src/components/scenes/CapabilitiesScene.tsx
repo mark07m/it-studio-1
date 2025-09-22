@@ -1,8 +1,10 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useAppStore } from '@/store/appStore'
 
 const CapabilitiesScene = () => {
+  const { theme } = useAppStore()
   const capabilities = [
     { title: 'Web Development', icon: '🌐', description: 'Modern web applications' },
     { title: 'Mobile Apps', icon: '📱', description: 'iOS & Android development' },
@@ -16,7 +18,9 @@ const CapabilitiesScene = () => {
     <div className="w-full h-full flex items-center justify-center p-4 overflow-hidden">
       <div className="max-w-7xl w-full h-full flex flex-col justify-center">
         <motion.h2
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center mb-8"
+          className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-800'
+          }`}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -28,7 +32,11 @@ const CapabilitiesScene = () => {
           {capabilities.map((capability, index) => (
             <motion.div
               key={capability.title}
-              className="backdrop-blur-[16px] bg-white/10 border border-white/20 rounded-lg p-3 md:p-4 lg:p-6 hover:bg-white/20 transition-all duration-300 cursor-pointer flex flex-col justify-center"
+              className={`backdrop-blur-[16px] rounded-lg p-3 md:p-4 lg:p-6 transition-all duration-300 cursor-pointer flex flex-col justify-center ${
+                theme === 'dark'
+                  ? 'bg-white/10 border-white/20 hover:bg-white/20'
+                  : 'bg-white/70 border-gray-200/50 hover:bg-white/90'
+              } border`}
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
@@ -38,10 +46,14 @@ const CapabilitiesScene = () => {
               }}
             >
               <div className="text-2xl md:text-3xl lg:text-4xl mb-2 md:mb-4 text-center">{capability.icon}</div>
-              <h3 className="text-sm md:text-base lg:text-lg font-semibold text-white mb-1 md:mb-2 text-center">
+              <h3 className={`text-sm md:text-base lg:text-lg font-semibold mb-1 md:mb-2 text-center ${
+                theme === 'dark' ? 'text-white' : 'text-gray-800'
+              }`}>
                 {capability.title}
               </h3>
-              <p className="text-white/70 text-xs md:text-sm text-center leading-tight">
+              <p className={`text-xs md:text-sm text-center leading-tight ${
+                theme === 'dark' ? 'text-white/70' : 'text-gray-600'
+              }`}>
                 {capability.description}
               </p>
             </motion.div>
