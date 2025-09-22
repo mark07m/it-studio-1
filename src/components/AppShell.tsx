@@ -13,7 +13,7 @@ const AppShell = ({ children }: AppShellProps) => {
   const { theme } = useAppStore()
 
   return (
-    <div className={`min-h-screen w-full ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
+    <div className={`h-screen w-full overflow-hidden ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
       {/* Background Pattern */}
       <div className="fixed inset-0 opacity-20">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10" />
@@ -21,12 +21,12 @@ const AppShell = ({ children }: AppShellProps) => {
       </div>
 
       {/* App Shell */}
-      <div className="relative z-10">
+      <div className="relative z-10 h-full flex flex-col">
         {/* Header */}
         <GlassHeader />
         
         {/* Main Content */}
-        <main className="pt-20 pb-24 min-h-screen">
+        <main className="flex-1 overflow-hidden">
           <SceneShell>
             {children}
           </SceneShell>

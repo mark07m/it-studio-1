@@ -207,15 +207,15 @@ const SceneShell = ({ children }: SceneShellProps) => {
   }
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full overflow-hidden">
       {/* Dot Navigation */}
-      <div className="absolute top-24 left-1/2 transform -translate-x-1/2 z-40">
+      <div className="absolute top-4 sm:top-6 left-1/2 transform -translate-x-1/2 z-40">
         <div className="flex space-x-2">
           {Object.entries(SCENES).map(([scene]) => (
             <motion.button
               key={scene}
               onClick={() => setCurrentScene(scene as SceneType)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
                 currentScene === scene
                   ? 'bg-cyan-300 scale-125'
                   : 'bg-white/50 hover:bg-white/70'
@@ -234,14 +234,14 @@ const SceneShell = ({ children }: SceneShellProps) => {
           variants={sceneVariants}
           initial="in"
           animate={sceneState}
-          className="w-full h-full"
+          className="w-full h-full overflow-hidden"
         >
           {children}
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation Arrows */}
-      <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-40">
+      {/* Navigation Arrows - Hidden on mobile */}
+      <div className="hidden md:block absolute top-1/2 left-4 transform -translate-y-1/2 z-40">
         <motion.button
           onClick={() => {
             const scenes = Object.keys(SCENES) as SceneType[]
@@ -259,7 +259,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
         </motion.button>
       </div>
 
-      <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-40">
+      <div className="hidden md:block absolute top-1/2 right-4 transform -translate-y-1/2 z-40">
         <motion.button
           onClick={() => {
             const scenes = Object.keys(SCENES) as SceneType[]
@@ -278,25 +278,25 @@ const SceneShell = ({ children }: SceneShellProps) => {
       </div>
 
       {/* Scene Info */}
-      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-40">
+      <div className="absolute bottom-16 sm:bottom-20 left-1/2 transform -translate-x-1/2 z-40">
         <motion.div
-          className="backdrop-blur-[16px] bg-white/15 border border-white/30 rounded-lg px-4 py-2"
+          className="backdrop-blur-[16px] bg-white/15 border border-white/30 rounded-lg px-3 sm:px-4 py-2"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <h3 className="text-white font-semibold text-sm">
+          <h3 className="text-white font-semibold text-xs sm:text-sm text-center">
             {SCENES[displayScene].title}
           </h3>
-          <p className="text-white/80 text-xs">
+          <p className="text-white/80 text-xs text-center max-w-xs sm:max-w-none">
             {SCENES[displayScene].description}
           </p>
         </motion.div>
       </div>
 
-      {/* Scroll Hint */}
+      {/* Scroll Hint - Hidden on mobile */}
       <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-40"
+        className="hidden md:block absolute bottom-8 left-1/2 transform -translate-x-1/2 z-40"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1 }}

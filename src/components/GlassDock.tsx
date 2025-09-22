@@ -18,22 +18,22 @@ const GlassDock = () => {
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-      className="fixed bottom-4 left-0 right-0 z-50 h-20 px-6"
+      className="fixed bottom-2 sm:bottom-4 left-2 right-2 sm:left-4 sm:right-4 z-50 h-16 sm:h-20"
     >
-      <div className="h-full w-[22%] backdrop-blur-[16px] bg-white/10 border border-white/30 rounded-2xl mx-auto shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
-        <div className="h-full flex items-center justify-center px-6">
-          <div className="flex items-center space-x-4">
+      <div className="h-full w-full sm:w-[22%] backdrop-blur-[16px] bg-white/10 border border-white/30 rounded-2xl mx-auto shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
+        <div className="h-full flex items-center justify-center px-2 sm:px-6">
+          <div className="flex items-center justify-between sm:justify-center w-full sm:w-auto space-x-1 sm:space-x-4">
             {dockItems.map((item) => (
               <motion.div
                 key={item.id}
-                className="flex flex-col items-center space-y-1 cursor-pointer"
+                className="flex flex-col items-center space-y-1 cursor-pointer flex-1 sm:flex-none"
                 onHoverStart={() => setHoveredItem(item.id)}
                 onHoverEnd={() => setHoveredItem(null)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <motion.div
-                  className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white text-xl shadow-lg`}
+                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white text-lg sm:text-xl shadow-lg`}
                   animate={{
                     scale: hoveredItem === item.id ? 1.2 : 1,
                     boxShadow: hoveredItem === item.id 
@@ -45,7 +45,7 @@ const GlassDock = () => {
                   {item.icon}
                 </motion.div>
                 <motion.span
-                  className="text-white/80 text-xs font-medium"
+                  className="text-white/80 text-xs font-medium text-center"
                   animate={{
                     opacity: hoveredItem === item.id ? 1 : 0.8,
                     y: hoveredItem === item.id ? -2 : 0
