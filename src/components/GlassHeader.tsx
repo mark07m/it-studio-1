@@ -29,9 +29,9 @@ const GlassHeader = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="fixed top-0 left-0 right-0 z-50 h-16 px-6"
+      className="fixed top-0 left-0 right-0 z-50 h-16 px-4"
     >
-      <div className="h-full w-full backdrop-blur-[16px] bg-white/10 border border-white/30 rounded-2xl mx-4 shadow-[0_8px_32px_rgba(0,0,0,0.5)] shadow-[inset_0_1px_0_rgba(0,255,255,0.5)]">
+      <div className="h-full w-full backdrop-blur-[16px] bg-white/10 border border-white/30 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] shadow-[inset_0_1px_0_rgba(0,255,255,0.5)]">
         <div className="h-full flex items-center justify-between px-6">
           {/* Logo */}
           <motion.div
