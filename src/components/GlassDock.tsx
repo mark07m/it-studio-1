@@ -1,12 +1,27 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAppStore } from '@/store/appStore'
 
-const GlassDock = () => {
+interface GlassDockProps {
+  isVisible?: boolean
+  onHover?: (isHovering: boolean) => void
+}
+
+const GlassDock = ({ isVisible = true, onHover }: GlassDockProps) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
+  const [isDockVisible, setIsDockVisible] = useState(false)
   const { theme } = useAppStore()
+
+  useEffect(() => {
+    if (isVisible) {
+      setIsDockVisible(true)
+    } else {
+      const timer = setTimeout(() => setIsDockVisible(false), 800)
+      return () => clearTimeout(timer)
+    }
+  }, [isVisible])
 
   const dockItems = [
     { id: 'cases', icon: '📁', label: 'Cases', color: 'from-blue-400 to-cyan-500' },
@@ -15,12 +30,35 @@ const GlassDock = () => {
     { id: 'calendar', icon: '📅', label: 'Calendar', color: 'from-purple-400 to-pink-500' },
   ]
 
+  const handleMouseEnter = () => {
+    if (onHover) {
+      onHover(true)
+    }
+  }
+
+  const handleMouseLeave = () => {
+    if (onHover) {
+      onHover(false)
+    }
+  }
+
   return (
     <motion.div
       initial={{ y: 100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-      className="fixed bottom-2 sm:bottom-4 left-2 right-2 sm:left-4 sm:right-4 z-50 h-16 sm:h-20"
+      animate={{ 
+        y: isVisible ? 0 : 100, 
+        opacity: isDockVisible ? 1 : 0 
+      }}
+      transition={{ 
+        duration: 0.4, 
+        ease: 'easeOut',
+        delay: isVisible ? 0 : 0
+      }}
+      className={`fixed bottom-2 sm:bottom-4 left-2 right-2 sm:left-4 sm:right-4 z-50 h-16 sm:h-20 ${
+        !isDockVisible ? 'pointer-events-none' : ''
+      }`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div className="glass h-full w-full sm:w-[22%] mx-auto">
         <div className="h-full flex items-center justify-center px-2 sm:px-6">
@@ -63,6 +101,9 @@ const GlassDock = () => {
           </div>
         </div>
       </div>
+      
+      {/* Расширенная область вокруг дока для предотвращения исчезновения */}
+      <div className="absolute -top-4 -bottom-4 -left-16 -right-16" />
     </motion.div>
   )
 }
