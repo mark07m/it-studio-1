@@ -250,7 +250,9 @@ const SceneShell = ({ children }: SceneShellProps) => {
           variants={sceneVariants}
           initial="in"
           animate={sceneState}
-          className="w-full h-full overflow-hidden"
+          className={`w-full h-full overflow-hidden ${
+            displayScene !== 'hero' ? 'md:max-w-6xl md:mx-auto' : ''
+          }`}
         >
           {children}
         </motion.div>
