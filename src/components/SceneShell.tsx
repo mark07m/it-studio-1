@@ -218,7 +218,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
   }
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div className="relative w-full h-full overflow-hidden flex flex-col">
       {/* Dot Navigation */}
       <nav className="absolute top-4 sm:top-6 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }} aria-label="Scene navigation">
         {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
@@ -250,7 +250,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
           variants={sceneVariants}
           initial="in"
           animate={sceneState}
-          className={`w-full h-full overflow-hidden ${
+          className={`w-full h-full overflow-hidden flex-1 ${
             displayScene !== 'hero' ? 'md:max-w-6xl md:mx-auto' : ''
           }`}
         >

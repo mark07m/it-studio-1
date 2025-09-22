@@ -45,7 +45,7 @@ const CapabilitiesScene = () => {
   ]
 
   return (
-    <main className="w-full h-full flex items-start justify-center p-4 pt-24 sm:pt-28 pb-8 lg:pb-12 overflow-y-auto" role="main" aria-label="Our capabilities section">
+    <main className="w-full h-full flex items-center justify-center p-4 pt-24 sm:pt-28 pb-8 lg:pb-12 flex-1" role="main" aria-label="Our capabilities section">
       {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-7xl w-full flex flex-col">
         <header className="text-center mb-3">

@@ -34,7 +34,7 @@ const App = () => {
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex-1">
       {renderScene()}
     </div>
   )

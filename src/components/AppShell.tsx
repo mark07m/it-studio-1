@@ -77,7 +77,7 @@ const AppShell = ({ children }: AppShellProps) => {
         <GlassHeader />
         
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto pb-2 lg:pb-6">
+        <main className="flex-1 h-full">
           {/* note: backdrop-filter needs non-clipped background */}
           <SceneShell>
             {children}

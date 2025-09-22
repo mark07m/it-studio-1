@@ -9,7 +9,7 @@ const HeroScene = () => {
   const { theme } = useAppStore()
 
   return (
-    <main className="w-full h-full flex items-center justify-center relative p-4 pt-20 sm:pt-24" role="main" aria-label="Hero section">
+    <main className="w-full h-full flex items-center justify-center relative p-4 pt-20 sm:pt-24 flex-1" role="main" aria-label="Hero section">
       {/* note: backdrop-filter needs non-clipped background */}
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">

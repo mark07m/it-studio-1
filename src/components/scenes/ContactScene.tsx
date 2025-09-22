@@ -68,7 +68,7 @@ const ContactScene = () => {
   }
 
   return (
-    <main className="w-full h-full flex items-center justify-center p-4 pt-24 sm:pt-28 pb-8 lg:pb-12 overflow-y-auto" role="main" aria-label="Contact section">
+    <main className="w-full h-full flex items-center justify-center p-4 pt-24 sm:pt-28 pb-8 lg:pb-12 flex-1" role="main" aria-label="Contact section">
       {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-6xl w-full h-full flex flex-col justify-center">
         <header className="text-center mb-4">
