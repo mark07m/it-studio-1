@@ -15,50 +15,70 @@ const ProcessScene = () => {
   ]
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-4">
+    <main className="w-full h-full flex items-center justify-center p-4 pt-20 sm:pt-24" role="main" aria-label="Our process section">
       {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-7xl w-full h-full flex flex-col justify-center">
-        <motion.h2
-          className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 ${
-            theme === 'dark' ? 'text-white' : 'text-gray-800'
-          }`}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          Our Process
-        </motion.h2>
+        <header className="text-center mb-8">
+          <motion.h2
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-gray-800'
+            }`}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            Our Process
+          </motion.h2>
+          <motion.p
+            className={`text-sm md:text-base mt-4 max-w-3xl mx-auto ${
+              theme === 'dark' ? 'text-white/70' : 'text-gray-600'
+            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            We follow a proven methodology to deliver exceptional results on time and within budget
+          </motion.p>
+        </header>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 flex-1 max-h-[60vh] overflow-y-auto">
+        <section 
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3 flex-1"
+          aria-label="Development process steps"
+        >
           {/* note: backdrop-filter needs non-clipped background */}
           {steps.map((step, index) => (
-            <motion.div
+            <motion.article
               key={step.title}
-              className="glass p-3 md:p-4 text-center transition-all duration-300 cursor-pointer flex flex-col justify-center hover:glass-dark"
+              className="glass p-2 md:p-3 text-center transition-all duration-300 cursor-pointer flex flex-col justify-center hover:glass-dark"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
               whileHover={{ 
-                scale: 1.05,
-                boxShadow: '0 0 30px rgba(0, 255, 255, 0.3)'
+                scale: 1.02,
+                boxShadow: '0 0 20px rgba(0, 255, 255, 0.2)'
               }}
+              role="article"
+              aria-labelledby={`step-${index}`}
             >
-              <div className="text-2xl md:text-3xl lg:text-4xl mb-2 md:mb-4">{step.icon}</div>
-              <h3 className={`text-sm md:text-base lg:text-lg font-semibold mb-1 md:mb-2 ${
-                theme === 'dark' ? 'text-white' : 'text-gray-800'
-              }`}>
+              <div className="text-xl md:text-2xl mb-2" aria-hidden="true">{step.icon}</div>
+              <h3 
+                id={`step-${index}`}
+                className={`text-xs md:text-sm font-semibold mb-1 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-800'
+                }`}
+              >
                 {step.title}
               </h3>
-              <p className={`text-xs md:text-sm leading-tight ${
+              <p className={`text-xs leading-tight ${
                 theme === 'dark' ? 'text-white/70' : 'text-gray-600'
               }`}>
                 {step.description}
               </p>
-            </motion.div>
+            </motion.article>
           ))}
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   )
 }
 

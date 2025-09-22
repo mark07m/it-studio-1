@@ -17,40 +17,60 @@ const TechnologiesScene = () => {
   ]
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-4">
+    <main className="w-full h-full flex items-center justify-center p-4 pt-20 sm:pt-24" role="main" aria-label="Technologies section">
       {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-7xl w-full h-full flex flex-col justify-center">
-        <motion.h2
-          className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 ${
-            theme === 'dark' ? 'text-white' : 'text-gray-800'
-          }`}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          Technologies
-        </motion.h2>
+        <header className="text-center mb-8">
+          <motion.h2
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-gray-800'
+            }`}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            Technologies
+          </motion.h2>
+          <motion.p
+            className={`text-sm md:text-base mt-4 max-w-3xl mx-auto ${
+              theme === 'dark' ? 'text-white/70' : 'text-gray-600'
+            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            We use cutting-edge technologies and modern frameworks to build robust, scalable solutions
+          </motion.p>
+        </header>
         
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4 flex-1 max-h-[60vh] overflow-y-auto">
+        <section 
+          className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2 md:gap-3 flex-1"
+          aria-label="Technology stack"
+        >
           {/* note: backdrop-filter needs non-clipped background */}
           {technologies.map((tech, index) => (
-            <motion.div
+            <motion.article
               key={tech.name}
-              className="glass p-3 md:p-4 text-center transition-all duration-300 cursor-pointer flex flex-col justify-center hover:glass-dark"
+              className="glass p-2 md:p-3 text-center transition-all duration-300 cursor-pointer flex flex-col justify-center hover:glass-dark"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
               whileHover={{ 
-                scale: 1.1,
-                boxShadow: '0 0 30px rgba(0, 255, 255, 0.3)'
+                scale: 1.03,
+                boxShadow: '0 0 20px rgba(0, 255, 255, 0.2)'
               }}
+              role="article"
+              aria-labelledby={`tech-${index}`}
             >
-              <div className={`w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 mx-auto mb-2 md:mb-4 rounded-lg bg-gradient-to-br ${tech.color} flex items-center justify-center text-white font-bold text-sm md:text-base lg:text-lg`}>
+              <div className={`w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 rounded-lg bg-gradient-to-br ${tech.color} flex items-center justify-center text-white font-bold text-xs md:text-sm`} aria-hidden="true">
                 {tech.name.charAt(0)}
               </div>
-              <h3 className={`text-xs md:text-sm lg:text-base font-semibold mb-1 ${
-                theme === 'dark' ? 'text-white' : 'text-gray-800'
-              }`}>
+              <h3 
+                id={`tech-${index}`}
+                className={`text-xs font-semibold mb-1 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-800'
+                }`}
+              >
                 {tech.name}
               </h3>
               <p className={`text-xs ${
@@ -58,11 +78,11 @@ const TechnologiesScene = () => {
               }`}>
                 {tech.category}
               </p>
-            </motion.div>
+            </motion.article>
           ))}
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   )
 }
 

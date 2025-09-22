@@ -6,55 +6,133 @@ import { useAppStore } from '@/store/appStore'
 const PortfolioScene = () => {
   const { theme } = useAppStore()
   const projects = [
-    { title: 'E-commerce Platform', tech: 'React, Node.js', status: 'Completed' },
-    { title: 'Mobile Banking App', tech: 'React Native, Firebase', status: 'In Progress' },
-    { title: 'AI Chatbot', tech: 'Python, OpenAI', status: 'Completed' },
-    { title: 'Cloud Dashboard', tech: 'Vue.js, AWS', status: 'Completed' },
+    { 
+      title: 'E-commerce Platform', 
+      tech: 'React, Node.js, MongoDB', 
+      status: 'Completed',
+      description: 'Full-stack e-commerce solution with payment integration, inventory management, and admin dashboard.',
+      features: ['Payment Processing', 'Inventory Management', 'Admin Dashboard', 'Mobile Responsive'],
+      image: '🛒'
+    },
+    { 
+      title: 'Mobile Banking App', 
+      tech: 'React Native, Firebase, Node.js', 
+      status: 'In Progress',
+      description: 'Secure mobile banking application with biometric authentication and real-time transactions.',
+      features: ['Biometric Auth', 'Real-time Transactions', 'Push Notifications', 'Offline Support'],
+      image: '🏦'
+    },
+    { 
+      title: 'AI Chatbot', 
+      tech: 'Python, OpenAI, FastAPI', 
+      status: 'Completed',
+      description: 'Intelligent customer support chatbot with natural language processing and context awareness.',
+      features: ['NLP Processing', 'Context Awareness', 'Multi-language Support', 'Analytics Dashboard'],
+      image: '🤖'
+    },
+    { 
+      title: 'Cloud Dashboard', 
+      tech: 'Vue.js, AWS, Docker', 
+      status: 'Completed',
+      description: 'Real-time cloud infrastructure monitoring dashboard with automated alerts and reporting.',
+      features: ['Real-time Monitoring', 'Automated Alerts', 'Custom Reports', 'Multi-cloud Support'],
+      image: '☁️'
+    },
   ]
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-4">
+    <main className="w-full h-full flex items-center justify-center p-4 pt-20 sm:pt-24" role="main" aria-label="Portfolio section">
       {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-7xl w-full h-full flex flex-col justify-center">
-        <motion.h2
-          className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 ${
-            theme === 'dark' ? 'text-white' : 'text-gray-800'
-          }`}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          Our Portfolio
-        </motion.h2>
+        <header className="text-center mb-8">
+          <motion.h2
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-gray-800'
+            }`}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            Our Portfolio
+          </motion.h2>
+          <motion.p
+            className={`text-sm md:text-base mt-4 max-w-3xl mx-auto ${
+              theme === 'dark' ? 'text-white/70' : 'text-gray-600'
+            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            Explore our recent projects and see how we bring innovative ideas to life
+          </motion.p>
+        </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 flex-1 max-h-[60vh] overflow-y-auto">
+        <section 
+          className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 flex-1"
+          aria-label="Portfolio projects"
+        >
           {/* note: backdrop-filter needs non-clipped background */}
           {projects.map((project, index) => (
-            <motion.div
+            <motion.article
               key={project.title}
-              className="glass p-4 md:p-6 transition-all duration-300 cursor-pointer flex flex-col justify-between hover:glass-dark"
+              className="glass p-3 md:p-4 transition-all duration-300 cursor-pointer flex flex-col hover:glass-dark"
               initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
               whileHover={{ 
-                scale: 1.02,
-                boxShadow: '0 0 30px rgba(0, 255, 255, 0.3)'
+                scale: 1.01,
+                boxShadow: '0 0 20px rgba(0, 255, 255, 0.2)'
               }}
+              role="article"
+              aria-labelledby={`project-${index}`}
             >
-              <div>
-                <h3 className={`text-lg md:text-xl lg:text-2xl font-semibold mb-2 md:mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-800'
-                }`}>
-                  {project.title}
-                </h3>
-                <p className={`text-sm md:text-base mb-3 ${
-                  theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'
-                }`}>{project.tech}</p>
+              <div className="flex items-start space-x-3 mb-3">
+                <div className="text-2xl md:text-3xl" aria-hidden="true">{project.image}</div>
+                <div className="flex-1">
+                  <h3 
+                    id={`project-${index}`}
+                    className={`text-base md:text-lg font-semibold mb-1 ${
+                      theme === 'dark' ? 'text-white' : 'text-gray-800'
+                    }`}
+                  >
+                    {project.title}
+                  </h3>
+                  <p className={`text-xs md:text-sm mb-2 ${
+                    theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'
+                  }`}>
+                    {project.tech}
+                  </p>
+                </div>
               </div>
+              
+              <p className={`text-xs md:text-sm mb-3 leading-relaxed ${
+                theme === 'dark' ? 'text-white/80' : 'text-gray-600'
+              }`}>
+                {project.description}
+              </p>
+              
+              <ul className="space-y-1 mb-3" aria-label={`${project.title} features`}>
+                {project.features.map((feature, featureIndex) => (
+                  <li 
+                    key={featureIndex}
+                    className={`text-xs flex items-center ${
+                      theme === 'dark' ? 'text-white/70' : 'text-gray-500'
+                    }`}
+                  >
+                    <span className="mr-1" aria-hidden="true">•</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              
               <div className="flex items-center justify-between mt-auto">
-                <span className={`text-xs md:text-sm ${
-                  theme === 'dark' ? 'text-white/70' : 'text-gray-600'
-                }`}>{project.status}</span>
+                <span className={`text-xs md:text-sm px-2 py-1 rounded-full ${
+                  project.status === 'Completed' 
+                    ? 'bg-green-500/20 text-green-400' 
+                    : 'bg-yellow-500/20 text-yellow-400'
+                }`}>
+                  {project.status}
+                </span>
                 <motion.button
                   className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm transition-all duration-300 ${
                     theme === 'dark'
@@ -63,15 +141,16 @@ const PortfolioScene = () => {
                   } border`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  aria-label={`View details for ${project.title}`}
                 >
                   View Details
                 </motion.button>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   )
 }
 

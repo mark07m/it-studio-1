@@ -9,10 +9,10 @@ const HeroScene = () => {
   const { theme } = useAppStore()
 
   return (
-    <div className="w-full h-full flex items-center justify-center relative p-4">
+    <main className="w-full h-full flex items-center justify-center relative p-4 pt-20 sm:pt-24" role="main" aria-label="Hero section">
       {/* note: backdrop-filter needs non-clipped background */}
       {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
         <motion.div
           className="absolute top-1/4 left-1/4 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 rounded-full blur-3xl"
           animate={{
@@ -40,9 +40,10 @@ const HeroScene = () => {
       </div>
 
       {/* Main Content */}
-      <div className="text-center z-10 max-w-4xl mx-auto">
+      <section className="text-center z-10 max-w-4xl mx-auto" aria-labelledby="hero-title">
         {/* Animated Title */}
         <motion.h1
+          id="hero-title"
           className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold mb-2 sm:mb-4 leading-tight ${
             theme === 'dark' ? 'text-white' : 'text-gray-800'
           }`}
@@ -98,10 +99,11 @@ const HeroScene = () => {
           whileTap={{ scale: 0.95 }}
           onHoverStart={() => setIsHovered(true)}
           onHoverEnd={() => setIsHovered(false)}
+          aria-label="Start building your project with us"
         >
           Let&apos;s Build Something Amazing
         </motion.button>
-      </div>
+      </section>
 
       {/* Floating Elements - Hidden on mobile */}
       <motion.div
@@ -129,7 +131,7 @@ const HeroScene = () => {
           delay: 1
         }}
       />
-    </div>
+    </main>
   )
 }
 

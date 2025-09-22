@@ -33,26 +33,41 @@ const PricingScene = () => {
   ]
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-4">
+    <main className="w-full h-full flex items-center justify-center p-4 pt-20 sm:pt-24" role="main" aria-label="Pricing section">
       {/* note: backdrop-filter needs non-clipped background */}
       <div className="max-w-7xl w-full h-full flex flex-col justify-center">
-        <motion.h2
-          className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 ${
-            theme === 'dark' ? 'text-white' : 'text-gray-800'
-          }`}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          Pricing Plans
-        </motion.h2>
+        <header className="text-center mb-8">
+          <motion.h2
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-gray-800'
+            }`}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            Pricing Plans
+          </motion.h2>
+          <motion.p
+            className={`text-sm md:text-base mt-4 max-w-3xl mx-auto ${
+              theme === 'dark' ? 'text-white/70' : 'text-gray-600'
+            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            Choose the perfect plan for your project needs. All plans include our standard support and maintenance.
+          </motion.p>
+        </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 flex-1 max-h-[60vh] overflow-y-auto">
+        <section 
+          className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 flex-1"
+          aria-label="Pricing plans"
+        >
           {/* note: backdrop-filter needs non-clipped background */}
           {plans.map((plan, index) => (
-            <motion.div
+            <motion.article
               key={plan.id}
-              className={`glass p-4 md:p-6 cursor-pointer transition-all duration-300 flex flex-col justify-between ${
+              className={`glass p-3 md:p-4 cursor-pointer transition-all duration-300 flex flex-col justify-between ${
                 selectedPlan === plan.id 
                   ? 'ring-2 ring-cyan-400/50 glass-dark'
                   : 'hover:glass-dark'
@@ -60,29 +75,39 @@ const PricingScene = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.01 }}
               onClick={() => setSelectedPlan(plan.id)}
+              role="article"
+              aria-labelledby={`plan-${index}`}
+              aria-pressed={selectedPlan === plan.id}
             >
               <div className="text-center">
-                <div className={`w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 rounded-lg bg-gradient-to-br ${plan.color} flex items-center justify-center text-white font-bold text-lg md:text-xl`}>
+                <div className={`w-10 h-10 md:w-12 md:h-12 mx-auto mb-2 md:mb-3 rounded-lg bg-gradient-to-br ${plan.color} flex items-center justify-center text-white font-bold text-sm md:text-base`} aria-hidden="true">
                   {plan.name.charAt(0)}
                 </div>
-                <h3 className={`text-lg md:text-xl lg:text-2xl font-semibold mb-2 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-800'
-                }`}>
+                <h3 
+                  id={`plan-${index}`}
+                  className={`text-base md:text-lg font-semibold mb-1 ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-800'
+                  }`}
+                >
                   {plan.name}
                 </h3>
-                <div className={`text-2xl md:text-3xl lg:text-4xl font-bold mb-4 ${
+                <div className={`text-xl md:text-2xl font-bold mb-3 ${
                   theme === 'dark' ? 'text-white' : 'text-gray-800'
                 }`}>
                   {plan.price}
                 </div>
-                <ul className="space-y-2 mb-4">
+                <ul className="space-y-1 mb-3" aria-label={`${plan.name} features`}>
                   {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className={`text-xs md:text-sm ${
-                      theme === 'dark' ? 'text-white/70' : 'text-gray-600'
-                    }`}>
-                      ✓ {feature}
+                    <li 
+                      key={featureIndex} 
+                      className={`text-xs flex items-center ${
+                        theme === 'dark' ? 'text-white/70' : 'text-gray-600'
+                      }`}
+                    >
+                      <span className="mr-1" aria-hidden="true">✓</span>
+                      {feature}
                     </li>
                   ))}
                 </ul>
@@ -97,14 +122,15 @@ const PricingScene = () => {
                 } border`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                aria-label={`Select ${plan.name} plan`}
               >
-                Choose Plan
+                {selectedPlan === plan.id ? 'Selected' : 'Choose Plan'}
               </motion.button>
-            </motion.div>
+            </motion.article>
           ))}
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   )
 }
 

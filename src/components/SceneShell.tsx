@@ -209,10 +209,10 @@ const SceneShell = ({ children }: SceneShellProps) => {
   return (
     <div className="relative w-full h-full overflow-hidden">
       {/* Dot Navigation */}
-      <div className="absolute top-4 sm:top-6 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }}>
+      <nav className="absolute top-4 sm:top-6 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }} aria-label="Scene navigation">
         {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
-        <div className="flex space-x-2">
-          {Object.entries(SCENES).map(([scene]) => (
+        <div className="flex space-x-2" role="tablist">
+          {Object.entries(SCENES).map(([scene, config], index) => (
             <motion.button
               key={scene}
               onClick={() => setCurrentScene(scene as SceneType)}
@@ -223,10 +223,14 @@ const SceneShell = ({ children }: SceneShellProps) => {
               }`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
+              role="tab"
+              aria-selected={currentScene === scene}
+              aria-label={`Go to ${config.title} section`}
+              tabIndex={currentScene === scene ? 0 : -1}
             />
           ))}
         </div>
-      </div>
+      </nav>
 
       {/* Scene Content */}
       <AnimatePresence mode="wait">
@@ -241,8 +245,8 @@ const SceneShell = ({ children }: SceneShellProps) => {
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation Arrows - Hidden on mobile */}
-      <div className="hidden md:block absolute top-1/2 left-4 z-40" style={{ transform: 'translateY(-50%)' }}>
+      {/* Navigation Arrows - Now visible on mobile */}
+      <div className="absolute top-1/2 left-2 sm:left-4 z-40" style={{ transform: 'translateY(-50%)' }}>
         {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
         <motion.button
           onClick={() => {
@@ -252,16 +256,18 @@ const SceneShell = ({ children }: SceneShellProps) => {
               useAppStore.getState().setCurrentScene(scenes[currentIndex - 1])
             }
           }}
-          className="glass w-12 h-12 rounded-full flex items-center justify-center text-white hover:glass-dark transition-all duration-300"
+          className="glass w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-white hover:glass-dark transition-all duration-300"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           disabled={isTransitioning}
+          aria-label="Previous section"
+          title="Previous section"
         >
-          ←
+          <span className="text-lg sm:text-xl" aria-hidden="true">←</span>
         </motion.button>
       </div>
 
-      <div className="hidden md:block absolute top-1/2 right-4 z-40" style={{ transform: 'translateY(-50%)' }}>
+      <div className="absolute top-1/2 right-2 sm:right-4 z-40" style={{ transform: 'translateY(-50%)' }}>
         {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
         <motion.button
           onClick={() => {
@@ -271,12 +277,14 @@ const SceneShell = ({ children }: SceneShellProps) => {
               useAppStore.getState().setCurrentScene(scenes[currentIndex + 1])
             }
           }}
-          className="glass w-12 h-12 rounded-full flex items-center justify-center text-white hover:glass-dark transition-all duration-300"
+          className="glass w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-white hover:glass-dark transition-all duration-300"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           disabled={isTransitioning}
+          aria-label="Next section"
+          title="Next section"
         >
-          →
+          <span className="text-lg sm:text-xl" aria-hidden="true">→</span>
         </motion.button>
       </div>
 
