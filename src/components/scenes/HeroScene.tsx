@@ -9,7 +9,7 @@ const HeroScene = () => {
   const { theme } = useAppStore()
 
   return (
-    <main className="w-full h-full flex items-center justify-center relative p-4 pt-24 sm:pt-28 pb-8 lg:pb-12 overflow-y-auto" role="main" aria-label="Hero section">
+    <main className="w-full h-full flex items-center justify-center relative p-4 pt-20 sm:pt-24" role="main" aria-label="Hero section">
       {/* note: backdrop-filter needs non-clipped background */}
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -44,7 +44,7 @@ const HeroScene = () => {
         {/* Animated Title */}
         <motion.h1
           id="hero-title"
-          className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2 sm:mb-3 leading-tight ${
+          className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold mb-2 sm:mb-4 leading-tight ${
             theme === 'dark' ? 'text-white' : 'text-gray-800'
           }`}
           initial={{ opacity: 0, y: 50 }}
@@ -74,7 +74,7 @@ const HeroScene = () => {
 
         {/* Subtitle */}
         <motion.p
-          className={`text-xs sm:text-sm md:text-base mb-3 sm:mb-4 max-w-xl mx-auto px-2 ${
+          className={`text-xs sm:text-sm md:text-base lg:text-lg mb-4 sm:mb-6 md:mb-8 max-w-xl mx-auto px-2 ${
             theme === 'dark' ? 'text-white/70' : 'text-gray-600'
           }`}
           initial={{ opacity: 0, y: 30 }}
@@ -86,7 +86,7 @@ const HeroScene = () => {
 
         {/* CTA Button */}
         <motion.button
-          className="glass px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded-xl font-semibold text-xs sm:text-sm md:text-base transition-all duration-300 hover:glass-dark ring-2 ring-cyan-400/50 shadow-[0_0_30px_rgba(0,255,255,0.4)]"
+          className="glass px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-xl font-semibold text-sm sm:text-base md:text-lg transition-all duration-300 hover:glass-dark ring-2 ring-cyan-400/50 shadow-[0_0_30px_rgba(0,255,255,0.4)]"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}

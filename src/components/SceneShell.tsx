@@ -309,8 +309,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
       {/* Scroll Hint - Only show on Hero scene */}
       {currentScene === 'hero' && (
         <motion.div
-          className="hidden md:block absolute bottom-8 left-1/2 z-40"
-          style={{ transform: 'translateX(-50%)' }}
+          className="hidden md:block fixed bottom-6 left-[46.5%] z-50"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
