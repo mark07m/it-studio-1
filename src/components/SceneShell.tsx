@@ -230,7 +230,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
             animate="animate"
             exit="exit"
             className={`absolute inset-0 w-full h-full ${
-              displayScene !== 'hero' ? 'md:max-w-6xl md:mx-auto' : ''
+              displayScene !== 'hero' && displayScene !== 'capabilities' ? 'md:max-w-6xl md:mx-auto' : ''
             }`}
             style={{ 
               willChange: 'transform',

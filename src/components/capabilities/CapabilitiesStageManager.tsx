@@ -3,6 +3,7 @@
 import { useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore } from '@/store/appStore'
+import CapabilitiesBackground from './backgrounds/CapabilitiesBackground'
 import CapabilityStage1 from './stages/CapabilityStage1'
 import CapabilityStage2 from './stages/CapabilityStage2'
 import CapabilityStage3 from './stages/CapabilityStage3'
@@ -133,6 +134,9 @@ const CapabilitiesStageManager = () => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
+      {/* Фон как в Hero, но с кубом вместо сферы */}
+      <CapabilitiesBackground className="absolute inset-0 z-0" />
+      
       <AnimatePresence mode="wait">
         <motion.div
           key={capabilityStage}
@@ -143,7 +147,7 @@ const CapabilitiesStageManager = () => {
             duration: prefersReducedMotion ? 0.3 : 0.6,
             ease: "easeInOut"
           }}
-          className="w-full h-full"
+          className="w-full h-full relative z-10"
         >
           <CurrentStage />
         </motion.div>
