@@ -288,8 +288,8 @@ const SceneShell = ({ children }: SceneShellProps) => {
         </motion.button>
       </div>
 
-      {/* Scene Info - Hidden for Hero scene */}
-      {currentScene !== 'hero' && (
+      {/* Scene Info - Hidden for Hero and Capabilities scenes */}
+      {currentScene !== 'hero' && currentScene !== 'capabilities' && (
         <div className="absolute bottom-16 sm:bottom-20 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }}>
           <motion.div
             className="glass rounded-lg px-3 sm:px-4 py-2"

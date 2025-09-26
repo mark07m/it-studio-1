@@ -6,6 +6,7 @@ export type SceneType = 'hero' | 'capabilities' | 'portfolio' | 'process' | 'tec
 export type SceneState = 'idle' | 'out' | 'in' | 'ready'
 
 export type HeroStage = 1 | 2 | 3 | 4
+export type CapabilityStage = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 
 interface AppState {
   currentScene: SceneType
@@ -20,6 +21,10 @@ interface AppState {
   heroStage: HeroStage
   isHeroTransitioning: boolean
   prefersReducedMotion: boolean
+  
+  // Capabilities stage management
+  capabilityStage: CapabilityStage
+  isCapabilityTransitioning: boolean
   
   // Skin management
   currentSkin: SkinName
@@ -39,6 +44,12 @@ interface AppState {
   nextHeroStage: () => void
   prevHeroStage: () => void
   setHeroTransitioning: (transitioning: boolean) => void
+  
+  // Capabilities stage actions
+  setCapabilityStage: (stage: CapabilityStage) => void
+  nextCapabilityStage: () => void
+  prevCapabilityStage: () => void
+  setCapabilityTransitioning: (transitioning: boolean) => void
   
   // Skin actions
   setSkin: (skin: SkinName) => void
@@ -62,6 +73,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   heroStage: 1,
   isHeroTransitioning: false,
   prefersReducedMotion: false, // Инициализируем как false, обновим на клиенте
+  
+  // Capabilities stage management
+  capabilityStage: 1,
+  isCapabilityTransitioning: false,
   
   // Skin management
   currentSkin: 'neonGlass',
@@ -92,6 +107,24 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ heroStage: (heroStage - 1) as HeroStage, isHeroTransitioning: true })
   },
   setHeroTransitioning: (transitioning) => set({ isHeroTransitioning: transitioning }),
+  
+  // Capabilities stage actions
+  setCapabilityStage: (stage) => {
+    const { isCapabilityTransitioning } = get()
+    if (isCapabilityTransitioning) return
+    set({ capabilityStage: stage, isCapabilityTransitioning: true })
+  },
+  nextCapabilityStage: () => {
+    const { capabilityStage, isCapabilityTransitioning } = get()
+    if (isCapabilityTransitioning || capabilityStage >= 8) return
+    set({ capabilityStage: (capabilityStage + 1) as CapabilityStage, isCapabilityTransitioning: true })
+  },
+  prevCapabilityStage: () => {
+    const { capabilityStage, isCapabilityTransitioning } = get()
+    if (isCapabilityTransitioning || capabilityStage <= 1) return
+    set({ capabilityStage: (capabilityStage - 1) as CapabilityStage, isCapabilityTransitioning: true })
+  },
+  setCapabilityTransitioning: (transitioning) => set({ isCapabilityTransitioning: transitioning }),
   
   // Skin actions
   setSkin: (skin) => {
