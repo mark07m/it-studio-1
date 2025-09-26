@@ -8,7 +8,7 @@ const CapabilityStage6 = () => {
 
   return (
     <main className="w-full h-full flex items-center justify-center p-4 pt-24 sm:pt-28 pb-8 lg:pb-12 flex-1" role="main" aria-label="Cloud Infrastructure section">
-      <div className="max-w-7xl w-full flex flex-col">
+      <div className="max-w-6xl w-full flex flex-col px-8 sm:px-12 md:px-16 lg:px-20">
         <header className="text-center mb-8">
           <motion.h2
             className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${

@@ -7,6 +7,7 @@ export type SceneState = 'idle' | 'out' | 'in' | 'ready'
 
 export type HeroStage = 1 | 2 | 3 | 4
 export type CapabilityStage = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+export type PortfolioStage = 1 | 2 | 3 | 4
 
 interface AppState {
   currentScene: SceneType
@@ -25,6 +26,10 @@ interface AppState {
   // Capabilities stage management
   capabilityStage: CapabilityStage
   isCapabilityTransitioning: boolean
+  
+  // Portfolio stage management
+  portfolioStage: PortfolioStage
+  isPortfolioTransitioning: boolean
   
   // Skin management
   currentSkin: SkinName
@@ -50,6 +55,12 @@ interface AppState {
   nextCapabilityStage: () => void
   prevCapabilityStage: () => void
   setCapabilityTransitioning: (transitioning: boolean) => void
+  
+  // Portfolio stage actions
+  setPortfolioStage: (stage: PortfolioStage) => void
+  nextPortfolioStage: () => void
+  prevPortfolioStage: () => void
+  setPortfolioTransitioning: (transitioning: boolean) => void
   
   // Skin actions
   setSkin: (skin: SkinName) => void
@@ -77,6 +88,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Capabilities stage management
   capabilityStage: 1,
   isCapabilityTransitioning: false,
+  
+  // Portfolio stage management
+  portfolioStage: 1,
+  isPortfolioTransitioning: false,
   
   // Skin management
   currentSkin: 'neonGlass',
@@ -125,6 +140,24 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ capabilityStage: (capabilityStage - 1) as CapabilityStage, isCapabilityTransitioning: true })
   },
   setCapabilityTransitioning: (transitioning) => set({ isCapabilityTransitioning: transitioning }),
+  
+  // Portfolio stage actions
+  setPortfolioStage: (stage) => {
+    const { isPortfolioTransitioning } = get()
+    if (isPortfolioTransitioning) return
+    set({ portfolioStage: stage, isPortfolioTransitioning: true })
+  },
+  nextPortfolioStage: () => {
+    const { portfolioStage, isPortfolioTransitioning } = get()
+    if (isPortfolioTransitioning || portfolioStage >= 4) return
+    set({ portfolioStage: (portfolioStage + 1) as PortfolioStage, isPortfolioTransitioning: true })
+  },
+  prevPortfolioStage: () => {
+    const { portfolioStage, isPortfolioTransitioning } = get()
+    if (isPortfolioTransitioning || portfolioStage <= 1) return
+    set({ portfolioStage: (portfolioStage - 1) as PortfolioStage, isPortfolioTransitioning: true })
+  },
+  setPortfolioTransitioning: (transitioning) => set({ isPortfolioTransitioning: transitioning }),
   
   // Skin actions
   setSkin: (skin) => {

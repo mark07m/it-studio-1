@@ -78,9 +78,9 @@ const SceneShell = ({ children }: SceneShellProps) => {
   const handleWheel = useCallback((e: WheelEvent) => {
     if (isTransitioning) return
 
-    // Don't handle wheel events in Hero scene - let HeroStageManager handle them
-    if (currentScene === 'hero') {
-      console.log('SceneShell: Ignoring wheel event in Hero scene')
+    // Don't handle wheel events in Hero, Capabilities and Portfolio scenes - let their managers handle them
+    if (currentScene === 'hero' || currentScene === 'capabilities' || currentScene === 'portfolio') {
+      console.log('SceneShell: Ignoring wheel event in', currentScene, 'scene')
       return
     }
 
@@ -127,12 +127,24 @@ const SceneShell = ({ children }: SceneShellProps) => {
   // Touch navigation for mobile and tablet devices (horizontal swipe)
   const handleTouchStart = useCallback((e: TouchEvent) => {
     if (isTransitioning) return
+    
+    // Don't handle touch events in Hero, Capabilities and Portfolio scenes - let their managers handle them
+    if (currentScene === 'hero' || currentScene === 'capabilities' || currentScene === 'portfolio') {
+      return
+    }
+    
     touchStartX.current = e.touches[0].clientX
     isTouching.current = true
-  }, [isTransitioning])
+  }, [isTransitioning, currentScene])
 
   const handleTouchEnd = useCallback((e: TouchEvent) => {
     if (isTransitioning || !isTouching.current) return
+    
+    // Don't handle touch events in Hero, Capabilities and Portfolio scenes - let their managers handle them
+    if (currentScene === 'hero' || currentScene === 'capabilities' || currentScene === 'portfolio') {
+      isTouching.current = false
+      return
+    }
     
     const touchEndX = e.changedTouches[0].clientX
     const deltaX = touchStartX.current - touchEndX
@@ -230,7 +242,7 @@ const SceneShell = ({ children }: SceneShellProps) => {
             animate="animate"
             exit="exit"
             className={`absolute inset-0 w-full h-full ${
-              displayScene !== 'hero' && displayScene !== 'capabilities' ? 'md:max-w-6xl md:mx-auto' : ''
+              displayScene !== 'hero' && displayScene !== 'capabilities' && displayScene !== 'portfolio' ? 'md:max-w-6xl md:mx-auto' : ''
             }`}
             style={{ 
               willChange: 'transform',
@@ -288,8 +300,8 @@ const SceneShell = ({ children }: SceneShellProps) => {
         </motion.button>
       </div>
 
-      {/* Scene Info - Hidden for Hero and Capabilities scenes */}
-      {currentScene !== 'hero' && currentScene !== 'capabilities' && (
+      {/* Scene Info - Hidden for Hero, Capabilities and Portfolio scenes */}
+      {currentScene !== 'hero' && currentScene !== 'capabilities' && currentScene !== 'portfolio' && (
         <div className="absolute bottom-16 sm:bottom-20 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }}>
           <motion.div
             className="glass rounded-lg px-3 sm:px-4 py-2"

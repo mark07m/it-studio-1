@@ -3,7 +3,7 @@
 import { useAppStore } from '@/store/appStore'
 import HeroScene from './scenes/HeroScene'
 import CapabilitiesScene from './scenes/CapabilitiesScene'
-import PortfolioScene from './scenes/PortfolioScene'
+import PortfolioStageManager from './portfolio/PortfolioStageManager'
 import ProcessScene from './scenes/ProcessScene'
 import TechnologiesScene from './scenes/TechnologiesScene'
 import PricingScene from './scenes/PricingScene'
@@ -19,7 +19,7 @@ const App = () => {
       case 'capabilities':
         return <CapabilitiesScene />
       case 'portfolio':
-        return <PortfolioScene />
+        return <PortfolioStageManager />
       case 'process':
         return <ProcessScene />
       case 'technologies':
