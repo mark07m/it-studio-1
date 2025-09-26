@@ -4,6 +4,8 @@ export type SceneType = 'hero' | 'capabilities' | 'portfolio' | 'process' | 'tec
 
 export type SceneState = 'idle' | 'out' | 'in' | 'ready'
 
+export type HeroStage = 1 | 2 | 3 | 4
+
 interface AppState {
   currentScene: SceneType
   sceneState: SceneState
@@ -13,6 +15,11 @@ interface AppState {
   language: 'en' | 'ru'
   cmdKOpen: boolean
   
+  // Hero stage management
+  heroStage: HeroStage
+  isHeroTransitioning: boolean
+  prefersReducedMotion: boolean
+  
   // Actions
   setCurrentScene: (scene: SceneType) => void
   setSceneState: (state: SceneState) => void
@@ -21,9 +28,15 @@ interface AppState {
   toggleTheme: () => void
   toggleLanguage: () => void
   toggleCmdK: () => void
+  
+  // Hero stage actions
+  setHeroStage: (stage: HeroStage) => void
+  nextHeroStage: () => void
+  prevHeroStage: () => void
+  setHeroTransitioning: (transitioning: boolean) => void
 }
 
-export const useAppStore = create<AppState>((set) => ({
+export const useAppStore = create<AppState>((set, get) => ({
   currentScene: 'hero',
   sceneState: 'ready',
   isTransitioning: false,
@@ -32,6 +45,11 @@ export const useAppStore = create<AppState>((set) => ({
   language: 'en',
   cmdKOpen: false,
   
+  // Hero stage management
+  heroStage: 1,
+  isHeroTransitioning: false,
+  prefersReducedMotion: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  
   setCurrentScene: (scene) => set({ currentScene: scene }),
   setSceneState: (state) => set({ sceneState: state }),
   setTransitioning: (transitioning) => set({ isTransitioning: transitioning }),
@@ -39,6 +57,24 @@ export const useAppStore = create<AppState>((set) => ({
   toggleTheme: () => set((state) => ({ theme: state.theme === 'light' ? 'dark' : 'light' })),
   toggleLanguage: () => set((state) => ({ language: state.language === 'en' ? 'ru' : 'en' })),
   toggleCmdK: () => set((state) => ({ cmdKOpen: !state.cmdKOpen })),
+  
+  // Hero stage actions
+  setHeroStage: (stage) => set({ heroStage: stage }),
+  nextHeroStage: () => {
+    const { heroStage, isHeroTransitioning } = get()
+    if (isHeroTransitioning || heroStage >= 4) return
+    set({ heroStage: (heroStage + 1) as HeroStage, isHeroTransitioning: true })
+    // Reset transition flag after animation
+    setTimeout(() => set({ isHeroTransitioning: false }), 600)
+  },
+  prevHeroStage: () => {
+    const { heroStage, isHeroTransitioning } = get()
+    if (isHeroTransitioning || heroStage <= 1) return
+    set({ heroStage: (heroStage - 1) as HeroStage, isHeroTransitioning: true })
+    // Reset transition flag after animation
+    setTimeout(() => set({ isHeroTransitioning: false }), 600)
+  },
+  setHeroTransitioning: (transitioning) => set({ isHeroTransitioning: transitioning }),
 }))
 
 // Scene configuration

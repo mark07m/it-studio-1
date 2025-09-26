@@ -1,0 +1,247 @@
+'use client'
+
+import { motion } from 'framer-motion'
+import { useAppStore } from '@/store/appStore'
+import { useState, useEffect } from 'react'
+
+const HeroStage4 = () => {
+  const { prefersReducedMotion } = useAppStore()
+  const [showCTA, setShowCTA] = useState(false)
+
+  // Trigger CTA animation after component mounts
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCTA(true)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: prefersReducedMotion ? 0.3 : 0.6,
+        staggerChildren: prefersReducedMotion ? 0.1 : 0.2
+      }
+    }
+  }
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 24 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: prefersReducedMotion ? 0.3 : 0.8,
+        ease: 'easeOut'
+      }
+    }
+  }
+
+  const subtitleVariants = {
+    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 12 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: prefersReducedMotion ? 0.3 : 0.6,
+        delay: prefersReducedMotion ? 0.1 : 0.2
+      }
+    }
+  }
+
+  // CTA animations
+  const primaryCTAVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: prefersReducedMotion ? 0 : 32,
+      scale: prefersReducedMotion ? 1 : 0.95
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        type: prefersReducedMotion ? 'tween' : 'spring',
+        duration: prefersReducedMotion ? 0.3 : undefined,
+        stiffness: prefersReducedMotion ? undefined : 220,
+        damping: prefersReducedMotion ? undefined : 20,
+        delay: prefersReducedMotion ? 0.1 : 0.2
+      }
+    }
+  }
+
+  const secondaryCTAVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: prefersReducedMotion ? 0 : 16,
+      x: prefersReducedMotion ? 0 : -8
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      x: 0,
+      transition: {
+        duration: prefersReducedMotion ? 0.3 : 0.4,
+        delay: prefersReducedMotion ? 0.2 : 0.32
+      }
+    }
+  }
+
+  const badgesVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: prefersReducedMotion ? 0.05 : 0.06,
+        delayChildren: prefersReducedMotion ? 0.3 : 0.4
+      }
+    }
+  }
+
+  const badgeVariants = {
+    hidden: { 
+      opacity: 0, 
+      scale: prefersReducedMotion ? 1 : 0.92,
+      y: prefersReducedMotion ? 0 : 8
+    },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: prefersReducedMotion ? 0.2 : 0.3,
+        ease: 'easeOut'
+      }
+    }
+  }
+
+  const horizontalCueVariants = {
+    hidden: { opacity: 0, x: -8 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: {
+        duration: 0.4,
+        delay: prefersReducedMotion ? 0.4 : 0.6
+      }
+    },
+    pulse: {
+      x: [0, 4, 0],
+      transition: {
+        duration: 1.5,
+        repeat: Infinity,
+        ease: 'easeInOut'
+      }
+    }
+  }
+
+  const titleText = "Разрабатываем инновационные\nрешения будущего"
+  const subtitleText = "IT-студия полного цикла разработки веб-приложений, мобильных приложений и сложных систем"
+
+  const badges = [
+    { text: "Web Development", color: "bg-purple-500/20 text-purple-300" },
+    { text: "Mobile Apps", color: "bg-blue-500/20 text-blue-300" },
+    { text: "AI Solutions", color: "bg-green-500/20 text-green-300" },
+    { text: "Blockchain", color: "bg-orange-500/20 text-orange-300" }
+  ]
+
+  return (
+    <motion.div
+      className="hero-stage-4 absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-8"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* Main content */}
+      <div className="text-center max-w-4xl mb-12">
+        {/* Title */}
+        <motion.h1 
+          className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+          variants={titleVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {titleText.split('\n').map((line, i) => (
+            <div key={i}>{line}</div>
+          ))}
+        </motion.h1>
+
+        {/* Subtitle */}
+        <motion.p 
+          className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed"
+          variants={subtitleVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {subtitleText}
+        </motion.p>
+      </div>
+
+      {/* CTA Buttons */}
+      {showCTA && (
+        <motion.div 
+          className="flex flex-col sm:flex-row gap-4 mb-8"
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.button 
+            className="px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-purple-500/25 hover:scale-105 active:scale-95"
+            variants={primaryCTAVariants}
+            whileHover={{ 
+              boxShadow: "0 0 30px rgba(139, 92, 246, 0.4)",
+              y: -2
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Начать проект
+          </motion.button>
+          
+          <motion.button 
+            className="px-8 py-4 border border-white/30 text-white rounded-lg font-semibold hover:bg-white/10 hover:border-white/50 transition-all duration-300 backdrop-blur-sm"
+            variants={secondaryCTAVariants}
+            whileHover={{ 
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              borderColor: "rgba(255, 255, 255, 0.5)",
+              y: -2
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Портфолио
+          </motion.button>
+        </motion.div>
+      )}
+
+      {/* Badges */}
+      {showCTA && (
+        <motion.div 
+          className="flex flex-wrap gap-3 justify-center max-w-2xl"
+          variants={badgesVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {badges.map((badge, index) => (
+            <motion.span
+              key={index}
+              className={`px-4 py-2 ${badge.color} rounded-full text-sm font-medium backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer`}
+              variants={badgeVariants}
+              whileHover={{ 
+                scale: 1.05,
+                y: -2,
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)"
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {badge.text}
+            </motion.span>
+          ))}
+        </motion.div>
+      )}
+
+    </motion.div>
+  )
+}
+
+export default HeroStage4

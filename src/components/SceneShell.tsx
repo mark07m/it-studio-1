@@ -206,6 +206,36 @@ const SceneShell = ({ children }: SceneShellProps) => {
 
   return (
     <div className="relative w-full h-full overflow-hidden flex flex-col">
+      {/* Dot Navigation */}
+      <nav className="absolute top-4 sm:top-6 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }} aria-label="Scene navigation">
+        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
+        <div className="flex space-x-2" role="tablist">
+          {Object.entries(SCENES).map(([scene, config], index) => (
+            <motion.button
+              key={scene}
+              onClick={() => {
+                const scenes = Object.keys(SCENES) as SceneType[]
+                const currentIndex = scenes.indexOf(currentScene)
+                const targetIndex = scenes.indexOf(scene as SceneType)
+                const direction = targetIndex > currentIndex ? 'right' : 'left'
+                setTransitionDirection(direction)
+                setCurrentScene(scene as SceneType)
+              }}
+              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
+                currentScene === scene
+                  ? 'bg-cyan-300 scale-125'
+                  : 'bg-white/50 hover:bg-white/70'
+              }`}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+              role="tab"
+              aria-selected={currentScene === scene}
+              aria-label={`Go to ${config.title} section`}
+              tabIndex={currentScene === scene ? 0 : -1}
+            />
+          ))}
+        </div>
+      </nav>
 
       {/* Scene Content */}
       <div 
@@ -238,16 +268,13 @@ const SceneShell = ({ children }: SceneShellProps) => {
         </AnimatePresence>
       </div>
 
-      {/* Navigation Arrows - Now visible on mobile */}
+      {/* Navigation Arrows */}
       <div className="absolute top-1/2 left-2 sm:left-4 z-40" style={{ transform: 'translateY(-50%)' }}>
-        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
         <motion.button
           onClick={() => {
-            console.log('Left arrow clicked, isTransitioning:', isTransitioning, 'currentScene:', currentScene, 'displayScene:', displayScene)
             const scenes = Object.keys(SCENES) as SceneType[]
             const currentIndex = scenes.indexOf(currentScene)
             if (currentIndex > 0) {
-              console.log('Setting transition direction to left and changing scene to:', scenes[currentIndex - 1])
               setTransitionDirection('left')
               setCurrentScene(scenes[currentIndex - 1])
             }
@@ -264,14 +291,11 @@ const SceneShell = ({ children }: SceneShellProps) => {
       </div>
 
       <div className="absolute top-1/2 right-2 sm:right-4 z-40" style={{ transform: 'translateY(-50%)' }}>
-        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
         <motion.button
           onClick={() => {
-            console.log('Right arrow clicked, isTransitioning:', isTransitioning, 'currentScene:', currentScene, 'displayScene:', displayScene)
             const scenes = Object.keys(SCENES) as SceneType[]
             const currentIndex = scenes.indexOf(currentScene)
             if (currentIndex < scenes.length - 1) {
-              console.log('Setting transition direction to right and changing scene to:', scenes[currentIndex + 1])
               setTransitionDirection('right')
               setCurrentScene(scenes[currentIndex + 1])
             }
@@ -287,75 +311,25 @@ const SceneShell = ({ children }: SceneShellProps) => {
         </motion.button>
       </div>
 
-      {/* Scene Info */}
-      <div className="absolute bottom-16 sm:bottom-20 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }}>
-        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
-        <motion.div
-          className="glass rounded-lg px-3 sm:px-4 py-2"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <h3 className="text-white font-semibold text-xs sm:text-sm text-center">
-            {SCENES[displayScene].title}
-          </h3>
-          <p className="text-white/80 text-xs text-center max-w-xs sm:max-w-none">
-            {SCENES[displayScene].description}
-          </p>
-        </motion.div>
-      </div>
-
-      {/* Navigation Hint - Different for mobile/tablet and desktop */}
-      {currentScene === 'hero' && (
-        <>
-          {/* Desktop scroll hint */}
+      {/* Scene Info - Hidden for Hero scene */}
+      {currentScene !== 'hero' && (
+        <div className="absolute bottom-16 sm:bottom-20 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }}>
           <motion.div
-            className="hidden md:block fixed bottom-6 left-[46.5%] z-50"
-            initial={{ opacity: 0, y: 10 }}
+            className="glass rounded-lg px-3 sm:px-4 py-2"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
+            transition={{ delay: 0.5 }}
           >
-            <div className="flex flex-col items-center space-y-2">
-              <motion.div
-                className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center"
-                animate={{ y: [0, 4, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <motion.div
-                  className="w-1 h-3 bg-white/70 rounded-full mt-2"
-                  animate={{ opacity: [0.3, 1, 0.3] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                />
-              </motion.div>
-              <p className="text-white/60 text-xs">Scroll to navigate</p>
-            </div>
+            <h3 className="text-white font-semibold text-xs sm:text-sm text-center">
+              {SCENES[displayScene].title}
+            </h3>
+            <p className="text-white/80 text-xs text-center max-w-xs sm:max-w-none">
+              {SCENES[displayScene].description}
+            </p>
           </motion.div>
-
-          {/* Mobile/Tablet swipe hint */}
-          <motion.div
-            className="block md:hidden fixed bottom-6 left-1/2 z-50"
-            style={{ transform: 'translateX(-50%)' }}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-          >
-            <div className="flex flex-col items-center space-y-2">
-              <motion.div
-                className="w-10 h-6 border-2 border-white/50 rounded-full flex items-center justify-center"
-                animate={{ x: [-2, 2, -2] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <motion.div
-                  className="w-3 h-1 bg-white/70 rounded-full"
-                  animate={{ opacity: [0.3, 1, 0.3] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                />
-              </motion.div>
-              <p className="text-white/60 text-xs">Swipe to navigate</p>
-            </div>
-          </motion.div>
-        </>
+        </div>
       )}
+
     </div>
   )
 }
