@@ -4,6 +4,9 @@ import { motion } from 'framer-motion'
 import { useAppStore } from '@/store/appStore'
 import { heroContent, heroAnimationConfig } from '@/data/heroContent'
 import { useState, useEffect } from 'react'
+import Button from '@/components/ui/Button'
+import ButtonSecondary from '@/components/ui/ButtonSecondary'
+import Badge from '@/components/ui/Badge'
 
 const HeroStage4 = () => {
   const { prefersReducedMotion } = useAppStore()
@@ -180,30 +183,22 @@ const HeroStage4 = () => {
           initial="hidden"
           animate="visible"
         >
-          <motion.button 
-            className="px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-purple-500/25 hover:scale-105 active:scale-95"
-            variants={primaryCTAVariants}
-            whileHover={{ 
-              boxShadow: "0 0 30px rgba(139, 92, 246, 0.4)",
-              y: -2
-            }}
-            whileTap={{ scale: 0.95 }}
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => console.log('Primary CTA clicked')}
+            className="min-w-[200px]"
           >
             {content.primaryCta.text}
-          </motion.button>
+          </Button>
           
-          <motion.button 
-            className="px-8 py-4 border border-white/30 text-white rounded-lg font-semibold hover:bg-white/10 hover:border-white/50 transition-all duration-300 backdrop-blur-sm"
-            variants={secondaryCTAVariants}
-            whileHover={{ 
-              backgroundColor: "rgba(255, 255, 255, 0.1)",
-              borderColor: "rgba(255, 255, 255, 0.5)",
-              y: -2
-            }}
-            whileTap={{ scale: 0.95 }}
+          <ButtonSecondary
+            size="lg"
+            onClick={() => console.log('Secondary CTA clicked')}
+            className="min-w-[200px]"
           >
             {content.secondaryCta.text}
-          </motion.button>
+          </ButtonSecondary>
         </motion.div>
       )}
 
@@ -216,23 +211,14 @@ const HeroStage4 = () => {
           animate="visible"
         >
           {content.badges.map((badge, index) => (
-            <motion.span
+            <Badge
               key={index}
-              className={`px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer ${
-                badge.variant === 'primary' ? 'bg-purple-500/20 text-purple-300' :
-                badge.variant === 'secondary' ? 'bg-blue-500/20 text-blue-300' :
-                'bg-green-500/20 text-green-300'
-              }`}
-              variants={badgeVariants}
-              whileHover={{ 
-                scale: 1.05,
-                y: -2,
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)"
-              }}
-              whileTap={{ scale: 0.95 }}
+              variant={badge.variant === 'primary' ? 'domain' : 
+                      badge.variant === 'secondary' ? 'tech' : 'feature'}
+              delay={index}
             >
               {badge.text}
-            </motion.span>
+            </Badge>
           ))}
         </motion.div>
       )}
@@ -245,10 +231,16 @@ const HeroStage4 = () => {
         animate="visible"
       >
         <motion.div
-          className="text-white/60 text-2xl font-light"
+          className="flex items-center gap-2 text-white/60 text-lg font-light"
           animate="pulse"
         >
-          {content.nextCue}
+          <span>Перейти к возможностям</span>
+          <motion.span
+            animate={{ x: [0, 4, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            →
+          </motion.span>
         </motion.div>
       </motion.div>
 

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore, SCENES, SceneType } from '@/store/appStore'
 import { useState } from 'react'
+import { useSkin } from '@/hooks/useSkin'
 
 const GlassHeader = () => {
   const { 
@@ -16,6 +17,8 @@ const GlassHeader = () => {
     toggleLanguage,
     toggleCmdK 
   } = useAppStore()
+  
+  const { currentSkin, nextSkin, skinConfig } = useSkin()
   
   const [isLogoHovered, setIsLogoHovered] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -116,6 +119,26 @@ const GlassHeader = () => {
                 whileTap={{ scale: 0.9 }}
               >
                 {soundEnabled ? '🔊' : '🔇'}
+              </motion.button>
+
+              {/* Skin Switcher */}
+              <motion.button
+                onClick={nextSkin}
+                className={`p-2 rounded-lg transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'text-white/80 hover:text-white hover:bg-white/20'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
+                }`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                title={`Текущий скин: ${skinConfig.displayName}`}
+              >
+                <div 
+                  className="w-4 h-4 rounded-full"
+                  style={{ 
+                    background: `linear-gradient(45deg, ${skinConfig.tokens.primary}, ${skinConfig.tokens.secondary})`
+                  }}
+                />
               </motion.button>
 
               {/* Theme Toggle */}

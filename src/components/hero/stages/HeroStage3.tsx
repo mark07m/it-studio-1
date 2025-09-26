@@ -55,66 +55,18 @@ const HeroStage3 = () => {
     }
   }
 
-  // Background animation variants
-  const backgroundVariants = {
-    initial: {
-      rotateY: 0,
-      scale: 1,
-      opacity: 0.9
-    },
-    animating: {
-      rotateY: prefersReducedMotion ? 0 : 90,
-      scale: prefersReducedMotion ? 1 : 1.12,
-      opacity: prefersReducedMotion ? 0.9 : 0.7,
-      transition: {
-        duration: prefersReducedMotion ? 0.3 : config.background.duration / 1000,
-        ease: config.background.easing
-      }
-    }
-  }
-
-  const gridVariants = {
-    initial: {
-      rotateX: 0,
-      scale: 1,
-      opacity: 0.9
-    },
-    animating: {
-      rotateX: prefersReducedMotion ? 0 : 10,
-      scale: prefersReducedMotion ? 1 : 1.12,
-      opacity: prefersReducedMotion ? 0.9 : 0.7,
-      transition: {
-        duration: prefersReducedMotion ? 0.3 : config.background.duration / 1000,
-        ease: config.background.easing
-      }
-    }
-  }
-
-  const gradientVariants = {
-    initial: {
-      backgroundPosition: '0% 50%'
-    },
-    animating: {
-      backgroundPosition: prefersReducedMotion ? '0% 50%' : '100% 50%',
-      transition: {
-        duration: prefersReducedMotion ? 0.3 : config.background.duration / 1000,
-        ease: 'easeInOut'
-      }
-    }
-  }
-
-  // Content counter-parallax
+  // Content counter-parallax - минимальное движение против фона
   const contentVariants = {
     initial: {
       y: 0,
       x: 0
     },
     animating: {
-      y: prefersReducedMotion ? 0 : -2,
-      x: prefersReducedMotion ? 0 : 2,
+      y: prefersReducedMotion ? 0 : -4,
+      x: prefersReducedMotion ? 0 : 4,
       transition: {
-        duration: prefersReducedMotion ? 0.3 : config.background.duration / 1000,
-        ease: 'easeInOut'
+        duration: prefersReducedMotion ? 0.3 : 1.2,
+        ease: [0.22, 1, 0.36, 1]
       }
     }
   }
@@ -126,49 +78,6 @@ const HeroStage3 = () => {
       initial="hidden"
       animate="visible"
     >
-      {/* Animated Background */}
-      <div className="absolute inset-0 -z-10">
-        {/* Base gradient background */}
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(135deg, #0A0F1E 0%, #1A1040 50%, #2D1B69 100%)',
-            backgroundSize: '200% 200%'
-          }}
-          variants={gradientVariants}
-          initial="initial"
-          animate={backgroundAnimating ? "animating" : "initial"}
-        />
-        
-        {/* Digital grid overlay */}
-        <motion.div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px'
-          }}
-          variants={gridVariants}
-          initial="initial"
-          animate={backgroundAnimating ? "animating" : "initial"}
-        />
-        
-        {/* 3D-like wireframe elements */}
-        <motion.div
-          className="absolute inset-0"
-          variants={backgroundVariants}
-          initial="initial"
-          animate={backgroundAnimating ? "animating" : "initial"}
-        >
-          {/* Floating geometric shapes */}
-          <div className="absolute top-1/4 left-1/4 w-32 h-32 border border-purple-400/20 rounded-lg transform rotate-45" />
-          <div className="absolute top-3/4 right-1/4 w-24 h-24 border border-purple-400/20 rounded-full" />
-          <div className="absolute bottom-1/4 left-1/3 w-16 h-16 border border-purple-400/20 transform rotate-12" />
-        </motion.div>
-      </div>
-
       {/* Main content with counter-parallax */}
       <motion.div 
         className="text-center max-w-4xl relative z-10"
@@ -176,7 +85,7 @@ const HeroStage3 = () => {
         initial="initial"
         animate={backgroundAnimating ? "animating" : "initial"}
       >
-        {/* Title - static during background animation */}
+        {/* Title - статичный во время анимации фона */}
         <motion.h1 
           className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
           variants={titleVariants}
@@ -187,7 +96,7 @@ const HeroStage3 = () => {
           <div>{content.title.line2}</div>
         </motion.h1>
 
-        {/* Subtitle - static during background animation */}
+        {/* Subtitle - статичный во время анимации фона */}
         <motion.p 
           className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed"
           variants={subtitleVariants}
@@ -197,8 +106,6 @@ const HeroStage3 = () => {
           {content.subtitle}
         </motion.p>
       </motion.div>
-
-
     </motion.div>
   )
 }

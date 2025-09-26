@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { SkinName } from '@/theme/tokens'
 
 export type SceneType = 'hero' | 'capabilities' | 'portfolio' | 'process' | 'technologies' | 'pricing' | 'contact'
 
@@ -20,6 +21,10 @@ interface AppState {
   isHeroTransitioning: boolean
   prefersReducedMotion: boolean
   
+  // Skin management
+  currentSkin: SkinName
+  isSkinTransitioning: boolean
+  
   // Actions
   setCurrentScene: (scene: SceneType) => void
   setSceneState: (state: SceneState) => void
@@ -34,6 +39,14 @@ interface AppState {
   nextHeroStage: () => void
   prevHeroStage: () => void
   setHeroTransitioning: (transitioning: boolean) => void
+  
+  // Skin actions
+  setSkin: (skin: SkinName) => void
+  nextSkin: () => void
+  setSkinTransitioning: (transitioning: boolean) => void
+  
+  // Accessibility actions
+  setPrefersReducedMotion: (prefers: boolean) => void
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -48,7 +61,11 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Hero stage management
   heroStage: 1,
   isHeroTransitioning: false,
-  prefersReducedMotion: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  prefersReducedMotion: false, // Инициализируем как false, обновим на клиенте
+  
+  // Skin management
+  currentSkin: 'neonGlass',
+  isSkinTransitioning: false,
   
   setCurrentScene: (scene) => set({ currentScene: scene }),
   setSceneState: (state) => set({ sceneState: state }),
@@ -75,7 +92,40 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ heroStage: (heroStage - 1) as HeroStage, isHeroTransitioning: true })
   },
   setHeroTransitioning: (transitioning) => set({ isHeroTransitioning: transitioning }),
+  
+  // Skin actions
+  setSkin: (skin) => {
+    const { isSkinTransitioning } = get()
+    if (isSkinTransitioning) return
+    set({ currentSkin: skin, isSkinTransitioning: true })
+    // Reset transition state after animation
+    setTimeout(() => set({ isSkinTransitioning: false }), 500)
+  },
+  nextSkin: () => {
+    const { currentSkin, isSkinTransitioning } = get()
+    if (isSkinTransitioning) return
+    const skins: SkinName[] = ['neonGlass', 'warmGlow', 'monoWireframe']
+    const currentIndex = skins.indexOf(currentSkin)
+    const nextIndex = (currentIndex + 1) % skins.length
+    set({ currentSkin: skins[nextIndex], isSkinTransitioning: true })
+    setTimeout(() => set({ isSkinTransitioning: false }), 500)
+  },
+  setSkinTransitioning: (transitioning) => set({ isSkinTransitioning: transitioning }),
+  
+  // Accessibility actions
+  setPrefersReducedMotion: (prefers) => set({ prefersReducedMotion: prefers }),
 }))
+
+// Инициализация prefersReducedMotion на клиенте
+if (typeof window !== 'undefined') {
+  const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  useAppStore.getState().setPrefersReducedMotion(mediaQuery.matches);
+  
+  // Слушаем изменения
+  mediaQuery.addEventListener('change', (e) => {
+    useAppStore.getState().setPrefersReducedMotion(e.matches);
+  });
+}
 
 // Scene configuration
 export const SCENES: Record<SceneType, { title: string; description: string }> = {
