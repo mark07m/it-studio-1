@@ -10,24 +10,24 @@ const PricingScene = () => {
 
   const plans = [
     { 
-      id: 'basic', 
-      name: 'Basic', 
-      price: '$5,000', 
-      features: ['Simple website', 'Basic design', '1 month support'],
+      id: 'mvp', 
+      name: 'MVP to Market', 
+      price: 'от $50,000', 
+      features: ['MVP за 8 недель', 'Product-Market Fit', 'Первые 1000 пользователей', '6 месяцев поддержки'],
       color: 'from-gray-400 to-gray-600'
     },
     { 
       id: 'standard', 
-      name: 'Standard', 
-      price: '$15,000', 
-      features: ['Web application', 'Custom design', '3 months support', 'Mobile responsive'],
+      name: 'Scale to Series A', 
+      price: 'от $150,000', 
+      features: ['Полноценный продукт', '10K+ пользователей', 'Готовность к раунду A', '12 месяцев поддержки'],
       color: 'from-cyan-400 to-blue-500'
     },
     { 
-      id: 'premium', 
-      name: 'Premium', 
-      price: '$35,000', 
-      features: ['Full-stack app', 'Advanced features', '6 months support', 'AI integration', 'Cloud deployment'],
+      id: 'enterprise', 
+      name: 'IPO Ready', 
+      price: 'от $500,000', 
+      features: ['Enterprise-решение', '1M+ пользователей', 'Готовность к IPO', 'Dedicated команда', '24 месяца поддержки'],
       color: 'from-purple-400 to-pink-500'
     },
   ]
@@ -45,7 +45,7 @@ const PricingScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Pricing Plans
+            Инвестиции в ваш успех
           </motion.h2>
           <motion.p
             className={`text-sm md:text-base mt-4 max-w-3xl mx-auto ${
@@ -55,7 +55,7 @@ const PricingScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Choose the perfect plan for your project needs. All plans include our standard support and maintenance.
+            Не просто разработка — это инвестиция в ваш бизнес. Каждый доллар возвращается с прибылью через масштабирование
           </motion.p>
         </header>
         

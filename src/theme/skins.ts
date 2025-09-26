@@ -1,4 +1,5 @@
-import { skinTokens, SkinName, SkinTokens } from './tokens';
+import { skinTokens, SkinTokens } from './tokens';
+import { SkinName } from './tokens';
 
 export interface SkinConfig {
   name: string;
@@ -67,3 +68,6 @@ export const getAllSkins = (): SkinConfig[] => {
 };
 
 export const getDefaultSkin = (): SkinName => 'neonGlass';
+
+// Re-export SkinName for external use
+export type { SkinName } from './tokens';

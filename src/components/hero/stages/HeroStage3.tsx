@@ -87,7 +87,7 @@ const HeroStage3 = () => {
       >
         {/* Title - статичный во время анимации фона */}
         <motion.h1 
-          className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+          className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight"
           variants={titleVariants}
           initial="hidden"
           animate="visible"
@@ -98,7 +98,7 @@ const HeroStage3 = () => {
 
         {/* Subtitle - статичный во время анимации фона */}
         <motion.p 
-          className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed"
+          className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed font-medium"
           variants={subtitleVariants}
           initial="hidden"
           animate="visible"

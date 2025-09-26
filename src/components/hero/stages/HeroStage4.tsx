@@ -156,7 +156,7 @@ const HeroStage4 = () => {
       <div className="text-center max-w-4xl mb-12">
         {/* Title */}
         <motion.h1 
-          className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+          className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight"
           variants={titleVariants}
           initial="hidden"
           animate="visible"
@@ -167,7 +167,7 @@ const HeroStage4 = () => {
 
         {/* Subtitle */}
         <motion.p 
-          className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed"
+          className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed font-medium"
           variants={subtitleVariants}
           initial="hidden"
           animate="visible"
@@ -234,7 +234,7 @@ const HeroStage4 = () => {
           className="flex items-center gap-2 text-white/60 text-lg font-light"
           animate="pulse"
         >
-          <span>Перейти к возможностям</span>
+          <span>Далее: Как мы строим</span>
           <motion.span
             animate={{ x: [0, 4, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}

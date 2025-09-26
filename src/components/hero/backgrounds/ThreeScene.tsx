@@ -19,10 +19,10 @@ function WireframeSphere({ heroStage }: { heroStage: number }) {
       meshRef.current.rotation.y += 0.005;
       meshRef.current.rotation.x += 0.002;
 
-      // Анимация для H3
+      // Анимация для H3 - только вращение, без масштабирования
       if (heroStage === 3) {
         meshRef.current.rotation.y += 0.01;
-        meshRef.current.scale.setScalar(1 + Math.sin(state.clock.elapsedTime) * 0.1);
+        // Убираем масштабирование, чтобы избежать конфликта с Framer Motion
       }
     }
   });
@@ -33,7 +33,7 @@ function WireframeSphere({ heroStage }: { heroStage: number }) {
         color="#8B5CF6"
         wireframe
         transparent
-        opacity={heroStage === 3 ? 0.6 : 0.3}
+        opacity={0.3}
       />
     </Sphere>
   );
@@ -77,11 +77,10 @@ function ParticleField({ heroStage }: { heroStage: number }) {
       pointsRef.current.rotation.y += 0.002;
       pointsRef.current.rotation.x += 0.001;
 
-      // Анимация для H3
+      // Анимация для H3 - только вращение, без масштабирования
       if (heroStage === 3) {
         pointsRef.current.rotation.y += 0.005;
-        const scale = 1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
-        pointsRef.current.scale.setScalar(scale);
+        // Убираем масштабирование частиц для Stage 3
       }
     }
   });
@@ -93,64 +92,14 @@ function ParticleField({ heroStage }: { heroStage: number }) {
         size={0.02}
         vertexColors
         transparent
-        opacity={heroStage === 3 ? 0.8 : 0.4}
+        opacity={0.4}
         sizeAttenuation
       />
     </points>
   );
 }
 
-// Компонент линий соединения
-function ConnectionLines({ heroStage }: { heroStage: number }) {
-  const linesRef = useRef<THREE.Group>(null);
-  const lineCount = 20;
 
-  useEffect(() => {
-    if (linesRef.current) {
-      // Очищаем предыдущие линии
-      linesRef.current.clear();
-
-      for (let i = 0; i < lineCount; i++) {
-        const points = [];
-        const segments = 10;
-
-        for (let j = 0; j <= segments; j++) {
-          const t = j / segments;
-          const x = (Math.random() - 0.5) * 8;
-          const y = (Math.random() - 0.5) * 8;
-          const z = (Math.random() - 0.5) * 8;
-          points.push(new THREE.Vector3(x, y, z));
-        }
-
-        const geometry = new THREE.BufferGeometry().setFromPoints(points);
-        const material = new THREE.LineBasicMaterial({
-          color: '#8B5CF6',
-          transparent: true,
-          opacity: heroStage === 3 ? 0.3 : 0.1,
-        });
-
-        const line = new THREE.LineSegments(geometry, material);
-        linesRef.current.add(line);
-      }
-    }
-  }, [heroStage]);
-
-  useFrame((state) => {
-    if (linesRef.current) {
-      linesRef.current.rotation.y += 0.001;
-      linesRef.current.rotation.x += 0.0005;
-
-      // Анимация для H3
-      if (heroStage === 3) {
-        linesRef.current.rotation.y += 0.003;
-        const scale = 1 + Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
-        linesRef.current.scale.setScalar(scale);
-      }
-    }
-  });
-
-  return <group ref={linesRef} />;
-}
 
 // Основной компонент сцены
 function Scene({ heroStage }: { heroStage: number }) {
@@ -162,7 +111,6 @@ function Scene({ heroStage }: { heroStage: number }) {
       
       <WireframeSphere heroStage={heroStage} />
       <ParticleField heroStage={heroStage} />
-      <ConnectionLines heroStage={heroStage} />
     </>
   );
 }

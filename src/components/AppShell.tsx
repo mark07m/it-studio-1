@@ -12,7 +12,7 @@ interface AppShellProps {
   children?: React.ReactNode
 }
 
-const AppShell = () => {
+const AppShell = ({ children }: AppShellProps) => {
   const { theme } = useAppStore()
   const [isDockVisible, setIsDockVisible] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)

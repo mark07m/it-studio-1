@@ -7,36 +7,36 @@ const PortfolioScene = () => {
   const { theme } = useAppStore()
   const projects = [
     { 
-      title: 'E-commerce Platform', 
-      tech: 'React, Node.js, MongoDB', 
-      status: 'Completed',
-      description: 'Full-stack e-commerce solution with payment integration, inventory management, and admin dashboard.',
-      features: ['Payment Processing', 'Inventory Management', 'Admin Dashboard', 'Mobile Responsive'],
+      title: 'FinTech Unicorn', 
+      tech: 'Next.js, TypeScript, PostgreSQL', 
+      status: 'Exited',
+      description: 'Платформа для управления инвестициями. $50M+ Series B, 100K+ пользователей, $500M+ AUM. Архитектура выдержала 10x рост за 6 месяцев.',
+      features: ['$50M Series B', '100K+ Users', '$500M+ AUM', '10x Scale'],
+      image: '🚀'
+    },
+    { 
+      title: 'E-commerce Giant', 
+      tech: 'React, Node.js, Redis', 
+      status: 'IPO',
+      description: 'Маркетплейс с 1M+ товаров. $2B+ GMV, 10K+ заказов/час, 99.99% uptime. Система выдержала Black Friday без сбоев.',
+      features: ['$2B+ GMV', '10K Orders/Hour', '99.99% Uptime', 'Black Friday Ready'],
       image: '🛒'
     },
     { 
-      title: 'Mobile Banking App', 
-      tech: 'React Native, Firebase, Node.js', 
-      status: 'In Progress',
-      description: 'Secure mobile banking application with biometric authentication and real-time transactions.',
-      features: ['Biometric Auth', 'Real-time Transactions', 'Push Notifications', 'Offline Support'],
-      image: '🏦'
+      title: 'HealthTech Revolution', 
+      tech: 'React Native, Python, AWS', 
+      status: 'Acquired',
+      description: 'Телемедицина с ИИ-диагностикой. $100M+ exit, 500K+ консультаций, 95% точность диагнозов. Приобретена крупной клиникой.',
+      features: ['$100M Exit', '500K+ Consultations', '95% AI Accuracy', 'Acquired'],
+      image: '🏥'
     },
     { 
-      title: 'AI Chatbot', 
-      tech: 'Python, OpenAI, FastAPI', 
-      status: 'Completed',
-      description: 'Intelligent customer support chatbot with natural language processing and context awareness.',
-      features: ['NLP Processing', 'Context Awareness', 'Multi-language Support', 'Analytics Dashboard'],
-      image: '🤖'
-    },
-    { 
-      title: 'Cloud Dashboard', 
-      tech: 'Vue.js, AWS, Docker', 
-      status: 'Completed',
-      description: 'Real-time cloud infrastructure monitoring dashboard with automated alerts and reporting.',
-      features: ['Real-time Monitoring', 'Automated Alerts', 'Custom Reports', 'Multi-cloud Support'],
-      image: '☁️'
+      title: 'AI Platform', 
+      tech: 'Python, FastAPI, Vector DB', 
+      status: 'Growing',
+      description: 'RAG-система для корпораций. $10M+ ARR, 1M+ документов/день, 99.9% точность. Используется в Fortune 500.',
+      features: ['$10M+ ARR', '1M Docs/Day', '99.9% Accuracy', 'Fortune 500'],
+      image: '🧠'
     },
   ]
 
@@ -53,7 +53,7 @@ const PortfolioScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Our Portfolio
+            Мы создали Unicorn'ов
           </motion.h2>
           <motion.p
             className={`text-sm md:text-base mt-4 max-w-3xl mx-auto ${
@@ -63,7 +63,7 @@ const PortfolioScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Explore our recent projects and see how we bring innovative ideas to life
+            Не просто проекты — это истории успеха. $2B+ в обороте, 1M+ пользователей, IPO и exit'ы. Мы знаем, как строить продукты, которые меняют мир
           </motion.p>
         </header>
         

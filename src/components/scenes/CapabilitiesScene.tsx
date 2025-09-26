@@ -7,40 +7,52 @@ const CapabilitiesScene = () => {
   const { theme } = useAppStore()
   const capabilities = [
     { 
-      title: 'Web Development', 
-      icon: '🌐', 
-      description: 'Full-stack web applications with React, Next.js, and Node.js. Responsive, scalable websites.',
-      features: ['Frontend & Backend', 'PWA', 'E-commerce']
+      title: 'Product Architecture', 
+      icon: '🏗️', 
+      description: 'Создаём архитектуру, которая выдержит миллионы пользователей. Как в Stripe, но для вашего продукта.',
+      features: ['System Design', 'Scalability', 'Performance']
     },
     { 
-      title: 'Mobile Apps', 
-      icon: '📱', 
-      description: 'Native and cross-platform mobile apps for iOS and Android. From concept to App Store.',
-      features: ['iOS & Android', 'React Native', 'Flutter']
+      title: 'Design Systems', 
+      icon: '🎨', 
+      description: 'Дизайн-системы уровня Notion. Каждый пиксель продуман, каждая анимация имеет смысл.',
+      features: ['Design Tokens', 'Component Library', 'Accessibility']
     },
     { 
-      title: 'AI/ML Solutions', 
-      icon: '🤖', 
-      description: 'Intelligent automation and machine learning solutions for business transformation.',
-      features: ['Machine Learning', 'NLP', 'Computer Vision']
+      title: 'Full-Stack Engineering', 
+      icon: '⚡', 
+      description: 'Фронтенд как в Linear, бэкенд как в Vercel. Скорость разработки × качество кода.',
+      features: ['React/Next.js', 'TypeScript', 'PostgreSQL']
+    },
+    { 
+      title: 'SaaS Platforms', 
+      icon: '🚀', 
+      description: 'Мульти-тенантность, биллинг, роли — всё как в лучших SaaS. От MVP до enterprise.',
+      features: ['Multi-tenancy', 'Billing Engine', 'User Management']
+    },
+    { 
+      title: 'E-commerce Solutions', 
+      icon: '🛒', 
+      description: 'Высоконагруженные магазины с кастомной логикой. Обрабатываем тысячи заказов в секунду.',
+      features: ['High Load', 'Custom Logic', 'Payment Processing']
     },
     { 
       title: 'Cloud Infrastructure', 
       icon: '☁️', 
-      description: 'Scalable cloud solutions using AWS, Azure, and Google Cloud.',
-      features: ['AWS/Azure/GCP', 'DevOps', 'Microservices']
+      description: 'Инфраструктура как код. Автоматизация, мониторинг, безопасность — всё на уровне AWS.',
+      features: ['Infrastructure as Code', 'Kubernetes', 'Monitoring']
     },
     { 
-      title: 'UI/UX Design', 
-      icon: '🎨', 
-      description: 'User-centered design combining aesthetics with functionality.',
-      features: ['User Research', 'Prototyping', 'Design Systems']
+      title: 'AI & Machine Learning', 
+      icon: '🧠', 
+      description: 'RAG-системы, чат-боты, рекомендации. ИИ, который действительно работает в продакшене.',
+      features: ['RAG Systems', 'ML Pipelines', 'Vector Databases']
     },
     { 
-      title: 'Technical Consulting', 
-      icon: '💡', 
-      description: 'Strategic technology guidance for informed decisions.',
-      features: ['Architecture Review', 'Tech Strategy', 'Digital Transformation']
+      title: 'API & Integrations', 
+      icon: '🔗', 
+      description: 'API как в Stripe — простые, быстрые, надёжные. Интегрируем что угодно с чем угодно.',
+      features: ['REST/GraphQL', 'Webhooks', 'Event Streaming']
     },
   ]
 
@@ -57,7 +69,7 @@ const CapabilitiesScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Our Capabilities
+            Мы строим как в FAANG
           </motion.h2>
           <motion.p
             className={`text-xs md:text-sm mt-2 max-w-2xl mx-auto ${
@@ -67,7 +79,7 @@ const CapabilitiesScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Comprehensive technology solutions to transform your ideas into reality
+            Архитектура, дизайн, код — всё на уровне лучших продуктов мира. Без компромиссов, только результат
           </motion.p>
         </header>
         

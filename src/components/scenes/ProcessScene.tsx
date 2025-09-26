@@ -6,12 +6,12 @@ import { useAppStore } from '@/store/appStore'
 const ProcessScene = () => {
   const { theme } = useAppStore()
   const steps = [
-    { title: 'Discover', description: 'Understanding your needs', icon: '🔍' },
-    { title: 'Design', description: 'Creating the blueprint', icon: '🎨' },
-    { title: 'Develop', description: 'Building the solution', icon: '⚡' },
-    { title: 'Test', description: 'Quality assurance', icon: '🧪' },
-    { title: 'Deploy', description: 'Going live', icon: '🚀' },
-    { title: 'Maintain', description: 'Ongoing support', icon: '🔧' },
+    { title: 'Deep Dive', description: 'Погружаемся в вашу индустрию как инсайдеры', icon: '🔍' },
+    { title: 'Product Vision', description: 'Создаём видение продукта, который изменит рынок', icon: '🎯' },
+    { title: 'System Design', description: 'Архитектура, которая выдержит миллионы пользователей', icon: '🏗️' },
+    { title: 'Code & Ship', description: 'Пишем код уровня FAANG, деплоим как Vercel', icon: '⚡' },
+    { title: 'Scale & Grow', description: 'Масштабируем до IPO, оптимизируем каждую метрику', icon: '🚀' },
+    { title: 'Exit Strategy', description: 'Готовим к exit или IPO — знаем, как это делается', icon: '💎' },
   ]
 
   return (
@@ -27,7 +27,7 @@ const ProcessScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Our Process
+            От идеи до IPO за 18 месяцев
           </motion.h2>
           <motion.p
             className={`text-sm md:text-base mt-4 max-w-3xl mx-auto ${
@@ -37,7 +37,7 @@ const ProcessScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            We follow a proven methodology to deliver exceptional results on time and within budget
+            Методология, проверенная на 50+ проектах. От MVP до Unicorn — мы знаем каждый шаг к успеху
           </motion.p>
         </header>
         

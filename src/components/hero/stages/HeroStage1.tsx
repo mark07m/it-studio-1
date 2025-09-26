@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useAppStore } from '@/store/appStore'
-import { heroContent, heroAnimationConfig } from '@/data/heroContent'
+import { heroContent, heroAnimationConfig } from '../../../data/heroContent'
 
 const HeroStage1 = () => {
   const { prefersReducedMotion } = useAppStore()
@@ -35,7 +35,7 @@ const HeroStage1 = () => {
       skewX: 0,
       transition: {
         duration: prefersReducedMotion ? 0.3 : config.title.duration / 1000,
-        ease: prefersReducedMotion ? 'easeOut' : config.title.easing
+        ease: prefersReducedMotion ? 'easeOut' : config.title.easing as any
       }
     }
   }
@@ -48,7 +48,7 @@ const HeroStage1 = () => {
       transition: {
         duration: prefersReducedMotion ? 0.3 : config.subtitle.duration / 1000,
         delay: prefersReducedMotion ? 0.1 : config.subtitle.delay / 1000,
-        ease: config.subtitle.easing
+        ease: config.subtitle.easing as any
       }
     }
   }
@@ -68,12 +68,12 @@ const HeroStage1 = () => {
       transition: {
         duration: config.scrollCue.pulseDuration / 1000,
         repeat: Infinity,
-        ease: 'easeInOut'
+        ease: 'easeInOut' as const
       }
     }
   }
 
-  const letterVariants = {
+  const wordVariants = {
     hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 8 },
     visible: (i: number) => ({
       opacity: 1,
@@ -81,7 +81,7 @@ const HeroStage1 = () => {
       transition: {
         duration: prefersReducedMotion ? 0.2 : 0.3,
         delay: prefersReducedMotion ? 0 : i * (config.title.stagger / 1000),
-        ease: 'easeOut'
+        ease: 'easeOut' as const
       }
     })
   }
@@ -97,32 +97,34 @@ const HeroStage1 = () => {
       <div className="text-center max-w-4xl">
         {/* Title with stagger animation */}
         <motion.h1 
-          className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+          className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight"
           variants={titleVariants}
         >
           {/* First line */}
           <div className="block">
-            {content.title.line1.split('').map((char, i) => (
+            {content.title.line1.split(' ').map((word: string, i: number) => (
               <motion.span
                 key={`line1-${i}`}
-                variants={letterVariants}
+                variants={wordVariants}
                 custom={i}
-                className="inline-block hover:text-purple-300 transition-colors duration-300"
+                className="inline hover:text-purple-300 transition-colors duration-300"
               >
-                {char === ' ' ? '\u00A0' : char}
+                {word}
+                {i < content.title.line1.split(' ').length - 1 && <span className="inline"> </span>}
               </motion.span>
             ))}
           </div>
           {/* Second line */}
           <div className="block">
-            {content.title.line2.split('').map((char, i) => (
+            {content.title.line2.split(' ').map((word: string, i: number) => (
               <motion.span
                 key={`line2-${i}`}
-                variants={letterVariants}
-                custom={content.title.line1.length + i}
-                className="inline-block hover:text-purple-300 transition-colors duration-300"
+                variants={wordVariants}
+                custom={content.title.line1.split(' ').length + i}
+                className="inline hover:text-purple-300 transition-colors duration-300"
               >
-                {char === ' ' ? '\u00A0' : char}
+                {word}
+                {i < content.title.line2.split(' ').length - 1 && <span className="inline"> </span>}
               </motion.span>
             ))}
           </div>
@@ -130,7 +132,7 @@ const HeroStage1 = () => {
 
         {/* Subtitle */}
         <motion.p 
-          className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed"
+          className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed font-medium"
           variants={subtitleVariants}
         >
           {content.subtitle}

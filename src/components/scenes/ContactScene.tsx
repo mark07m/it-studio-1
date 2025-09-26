@@ -80,7 +80,7 @@ const ContactScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Get In Touch
+            Создадим следующий Unicorn вместе
           </motion.h2>
           <motion.p
             className={`text-sm md:text-base mt-4 max-w-2xl mx-auto ${
@@ -90,7 +90,7 @@ const ContactScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Ready to bring your idea to life? We&apos;d love to hear from you and discuss how we can help.
+            У вас есть идея, которая изменит мир? У нас есть опыт, чтобы её реализовать. Обсудим, как превратить вашу мечту в миллиардный бизнес
           </motion.p>
         </header>
         
@@ -110,7 +110,7 @@ const ContactScene = () => {
                 theme === 'dark' ? 'text-white' : 'text-gray-800'
               }`}
             >
-              Let&apos;s Talk
+              Свяжитесь с нами
             </h3>
             
             <div className="space-y-2 md:space-y-3" role="list">
@@ -184,7 +184,7 @@ const ContactScene = () => {
                 theme === 'dark' ? 'text-white' : 'text-gray-800'
               }`}
             >
-              Send us a message
+              Расскажите о вашей идее
             </h3>
             
             <div>
@@ -194,7 +194,7 @@ const ContactScene = () => {
                   theme === 'dark' ? 'text-white' : 'text-gray-800'
                 }`}
               >
-                Name <span className="text-red-400" aria-label="required">*</span>
+                Имя <span className="text-red-400" aria-label="required">*</span>
               </label>
               <input
                 id="contact-name"
@@ -209,7 +209,7 @@ const ContactScene = () => {
                 className={`w-full px-3 py-2 md:px-4 md:py-3 glass focus:outline-none transition-all duration-300 text-sm md:text-base focus:ring-2 focus:ring-cyan-400/50 ${
                   errors.name ? 'ring-2 ring-red-400' : ''
                 }`}
-                placeholder="Your name"
+                placeholder="Ваше имя"
                 required
                 aria-required="true"
                 aria-invalid={!!errors.name}
@@ -264,7 +264,7 @@ const ContactScene = () => {
                   theme === 'dark' ? 'text-white' : 'text-gray-800'
                 }`}
               >
-                Message <span className="text-red-400" aria-label="required">*</span>
+                Сообщение <span className="text-red-400" aria-label="required">*</span>
               </label>
               <textarea
                 id="contact-message"
@@ -281,7 +281,7 @@ const ContactScene = () => {
                     ? 'bg-white/10 border-white/20 text-white placeholder-white/50 focus:border-cyan-400/50'
                     : 'bg-white/25 border-gray-200/50 text-gray-800 placeholder-gray-500 focus:border-cyan-500/50'
                 } border ${errors.message ? 'ring-2 ring-red-400' : ''}`}
-                placeholder="Tell us about your project..."
+                placeholder="Опишите вашу идею, которая изменит мир..."
                 required
                 aria-required="true"
                 aria-invalid={!!errors.message}
@@ -324,7 +324,7 @@ const ContactScene = () => {
                   Sending...
                 </span>
               ) : (
-                'Send Message'
+                'Создать Unicorn'
               )}
             </motion.button>
           </motion.form>

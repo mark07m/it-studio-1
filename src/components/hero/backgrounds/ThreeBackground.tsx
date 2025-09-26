@@ -44,9 +44,9 @@ export default function ThreeBackground({ heroStage, className = '' }: ThreeBack
         };
       case 3:
         return {
-          opacity: 0.8,
+          opacity: 1.0,
           scale: 1.2,
-          rotateY: 90,
+          rotateY: 30,
         };
       case 4:
         return {

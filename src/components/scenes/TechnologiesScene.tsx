@@ -6,14 +6,18 @@ import { useAppStore } from '@/store/appStore'
 const TechnologiesScene = () => {
   const { theme } = useAppStore()
   const technologies = [
-    { name: 'React', category: 'Frontend', color: 'from-blue-400 to-cyan-500' },
-    { name: 'Next.js', category: 'Frontend', color: 'from-gray-400 to-gray-600' },
-    { name: 'TypeScript', category: 'Language', color: 'from-blue-500 to-blue-700' },
-    { name: 'Node.js', category: 'Backend', color: 'from-green-400 to-green-600' },
-    { name: 'Python', category: 'Language', color: 'from-yellow-400 to-orange-500' },
-    { name: 'AWS', category: 'Cloud', color: 'from-orange-400 to-red-500' },
-    { name: 'Docker', category: 'DevOps', color: 'from-blue-500 to-blue-700' },
-    { name: 'MongoDB', category: 'Database', color: 'from-green-500 to-green-700' },
+    { name: 'React', category: 'Meta', color: 'from-blue-400 to-cyan-500' },
+    { name: 'Next.js', category: 'Vercel', color: 'from-gray-400 to-gray-600' },
+    { name: 'TypeScript', category: 'Microsoft', color: 'from-blue-500 to-blue-700' },
+    { name: 'Node.js', category: 'Joyent', color: 'from-green-400 to-green-600' },
+    { name: 'Python', category: 'Google', color: 'from-yellow-400 to-orange-500' },
+    { name: 'AWS', category: 'Amazon', color: 'from-orange-400 to-red-500' },
+    { name: 'Kubernetes', category: 'Google', color: 'from-blue-500 to-blue-700' },
+    { name: 'PostgreSQL', category: 'Open Source', color: 'from-green-500 to-green-700' },
+    { name: 'Redis', category: 'Redis Labs', color: 'from-red-400 to-red-600' },
+    { name: 'Docker', category: 'Docker Inc', color: 'from-blue-600 to-blue-800' },
+    { name: 'GraphQL', category: 'Meta', color: 'from-pink-400 to-purple-500' },
+    { name: 'TensorFlow', category: 'Google', color: 'from-orange-500 to-yellow-500' },
   ]
 
   return (
@@ -29,7 +33,7 @@ const TechnologiesScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Technologies
+            Технологии, которые создали FAANG
           </motion.h2>
           <motion.p
             className={`text-sm md:text-base mt-4 max-w-3xl mx-auto ${
@@ -39,7 +43,7 @@ const TechnologiesScene = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            We use cutting-edge technologies and modern frameworks to build robust, scalable solutions
+            Мы используем те же технологии, что и в Google, Meta, Amazon. Не экспериментируем — применяем проверенные решения
           </motion.p>
         </header>
         
