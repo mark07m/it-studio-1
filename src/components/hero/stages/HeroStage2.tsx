@@ -2,11 +2,15 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore } from '@/store/appStore'
+import { heroContent, heroAnimationConfig } from '@/data/heroContent'
 import { useState, useEffect } from 'react'
 
 const HeroStage2 = () => {
   const { prefersReducedMotion } = useAppStore()
   const [showMorph, setShowMorph] = useState(false)
+  
+  const content = heroContent.stage2
+  const config = heroAnimationConfig.stage2
 
   // Trigger morph animation after component mounts
   useEffect(() => {
@@ -66,8 +70,8 @@ const HeroStage2 = () => {
       rotateX: 15,
       scale: 0.95,
       transition: {
-        duration: prefersReducedMotion ? 0.25 : 0.4,
-        ease: [0.22, 1, 0.36, 1] // cubic-bezier(0.22,1,0.36,1)
+        duration: prefersReducedMotion ? 0.25 : config.morph.duration / 1000,
+        ease: config.morph.easing
       }
     },
     exit: {
@@ -95,9 +99,9 @@ const HeroStage2 = () => {
       rotateX: 0,
       scale: 1,
       transition: {
-        duration: prefersReducedMotion ? 0.25 : 0.4,
+        duration: prefersReducedMotion ? 0.25 : config.morph.duration / 1000,
         delay: prefersReducedMotion ? 0.1 : 0.2,
-        ease: [0.22, 1, 0.36, 1]
+        ease: config.morph.easing
       }
     }
   }
@@ -107,15 +111,11 @@ const HeroStage2 = () => {
     visible: { 
       opacity: 1,
       transition: {
-        duration: prefersReducedMotion ? 0.2 : 0.3,
+        duration: prefersReducedMotion ? 0.2 : config.crossfade.duration / 1000,
         delay: prefersReducedMotion ? 0.2 : 0.4
       }
     }
   }
-
-  const titleA = "Создаем цифровые"
-  const titleB = "Разрабатываем инновационные"
-  const secondLine = "решения будущего"
 
   return (
     <motion.div
@@ -138,7 +138,7 @@ const HeroStage2 = () => {
                 animate="visible"
                 exit="exit"
               >
-                {titleA}
+                {content.titleA.line1}
               </motion.h1>
             ) : (
               <motion.h1 
@@ -148,7 +148,7 @@ const HeroStage2 = () => {
                 initial="initial"
                 animate="visible"
               >
-                {titleB}
+                {content.titleB.line1}
               </motion.h1>
             )}
           </AnimatePresence>
@@ -160,7 +160,7 @@ const HeroStage2 = () => {
             initial="hidden"
             animate="visible"
           >
-            {secondLine}
+            {content.titleA.line2}
           </motion.h1>
         </div>
 
@@ -171,7 +171,7 @@ const HeroStage2 = () => {
           initial="hidden"
           animate="visible"
         >
-          IT-студия полного цикла разработки веб-приложений, мобильных приложений и сложных систем
+          {content.subtitle}
         </motion.p>
       </div>
 

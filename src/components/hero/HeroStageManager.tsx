@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { useAppStore, HeroStage } from '@/store/appStore'
 import HeroStage1 from './stages/HeroStage1'
 import HeroStage2 from './stages/HeroStage2'
@@ -18,8 +18,16 @@ const HeroStageManager = ({ className = '' }: HeroStageManagerProps) => {
     nextHeroStage, 
     prevHeroStage, 
     setHeroTransitioning,
-    prefersReducedMotion 
+    prefersReducedMotion,
+    setCurrentScene
   } = useAppStore()
+
+  // Refs for debouncing and touch handling
+  const lastWheelTime = useRef(0)
+  const lastTouchTime = useRef(0)
+  const touchStartY = useRef(0)
+  const isTouchActive = useRef(false)
+  const transitionTimeout = useRef<NodeJS.Timeout | null>(null)
 
   // Keyboard navigation
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
@@ -28,59 +36,106 @@ const HeroStageManager = ({ className = '' }: HeroStageManagerProps) => {
     switch (event.key) {
       case 'ArrowUp':
         event.preventDefault()
-        prevHeroStage()
+        if (heroStage > 1) {
+          prevHeroStage()
+        }
         break
       case 'ArrowDown':
         event.preventDefault()
-        nextHeroStage()
+        if (heroStage < 4) {
+          nextHeroStage()
+        } else if (heroStage === 4) {
+          // On stage 4, arrow down goes to Capabilities
+          setCurrentScene('capabilities')
+        }
         break
     }
-  }, [isHeroTransitioning, nextHeroStage, prevHeroStage])
+  }, [isHeroTransitioning, nextHeroStage, prevHeroStage, heroStage, setCurrentScene])
 
-  // Wheel navigation for desktop
+  // Wheel navigation for desktop with debouncing
   const handleWheel = useCallback((event: WheelEvent) => {
-    if (isHeroTransitioning || prefersReducedMotion) return
+    if (isHeroTransitioning || prefersReducedMotion || isTouchActive.current) return
     
-    event.preventDefault()
+    const now = Date.now()
+    if (now - lastWheelTime.current < 100) return // Debounce 100ms
     
-    if (event.deltaY > 0) {
-      nextHeroStage()
-    } else if (event.deltaY < 0) {
-      prevHeroStage()
+    // Only handle vertical wheel events
+    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+      event.preventDefault()
+      lastWheelTime.current = now
+      
+      if (Math.abs(event.deltaY) > 10) { // Minimum wheel delta
+        console.log(`HeroStageManager wheel: heroStage=${heroStage}, deltaY=${event.deltaY}`)
+        if (event.deltaY > 0) {
+          // Swipe down
+          if (heroStage < 4) {
+            console.log('HeroStageManager: Moving to next stage')
+            nextHeroStage()
+          } else if (heroStage === 4) {
+            // On stage 4, swipe down goes to Capabilities
+            console.log('HeroStageManager: Switching to Capabilities from stage 4')
+            setCurrentScene('capabilities')
+          }
+        } else {
+          // Swipe up - only allow on stages 2-4
+          if (heroStage > 1) {
+            console.log('HeroStageManager: Moving to previous stage')
+            prevHeroStage()
+          }
+        }
+      }
     }
-  }, [isHeroTransitioning, prefersReducedMotion, nextHeroStage, prevHeroStage])
+  }, [isHeroTransitioning, prefersReducedMotion, nextHeroStage, prevHeroStage, heroStage, setCurrentScene])
 
-  // Touch navigation for mobile
+  // Touch navigation for mobile with improved handling
   const handleTouchStart = useCallback((event: TouchEvent) => {
-    if (isHeroTransitioning || prefersReducedMotion) return
+    if (isHeroTransitioning || prefersReducedMotion || isTouchActive.current) return
     
     const touch = event.touches[0]
-    const startY = touch.clientY
+    touchStartY.current = touch.clientY
+    isTouchActive.current = true
     
     const handleTouchMove = (moveEvent: TouchEvent) => {
       moveEvent.preventDefault()
     }
     
     const handleTouchEnd = (endEvent: TouchEvent) => {
+      const now = Date.now()
+      if (now - lastTouchTime.current < 200) { // Debounce 200ms
+        isTouchActive.current = false
+        return
+      }
+      
       const touch = endEvent.changedTouches[0]
       const endY = touch.clientY
-      const deltaY = startY - endY
+      const deltaY = touchStartY.current - endY
       
-      if (Math.abs(deltaY) > 50) { // Minimum swipe distance
+      if (Math.abs(deltaY) > 80) { // Increased minimum swipe distance
+        lastTouchTime.current = now
         if (deltaY > 0) {
-          nextHeroStage()
+          // Swipe down
+          if (heroStage < 4) {
+            nextHeroStage()
+          } else if (heroStage === 4) {
+            // On stage 4, swipe down goes to Capabilities
+            setCurrentScene('capabilities')
+          }
         } else {
-          prevHeroStage()
+          // Swipe up - only allow on stages 2-4
+          if (heroStage > 1) {
+            prevHeroStage()
+          }
         }
       }
       
+      isTouchActive.current = false
       document.removeEventListener('touchmove', handleTouchMove)
       document.removeEventListener('touchend', handleTouchEnd)
     }
     
     document.addEventListener('touchmove', handleTouchMove, { passive: false })
     document.addEventListener('touchend', handleTouchEnd)
-  }, [isHeroTransitioning, prefersReducedMotion, nextHeroStage, prevHeroStage])
+  }, [isHeroTransitioning, prefersReducedMotion, nextHeroStage, prevHeroStage, heroStage, setCurrentScene])
 
   // Set up event listeners
   useEffect(() => {
@@ -98,13 +153,34 @@ const HeroStageManager = ({ className = '' }: HeroStageManagerProps) => {
   // Reset transition flag when stage changes
   useEffect(() => {
     if (isHeroTransitioning) {
-      const timer = setTimeout(() => {
-        setHeroTransitioning(false)
-      }, 600)
+      // Clear any existing timeout
+      if (transitionTimeout.current) {
+        clearTimeout(transitionTimeout.current)
+      }
       
-      return () => clearTimeout(timer)
+      transitionTimeout.current = setTimeout(() => {
+        setHeroTransitioning(false)
+        transitionTimeout.current = null
+      }, 800) // Increased timeout for more reliable transitions
+      
+      return () => {
+        if (transitionTimeout.current) {
+          clearTimeout(transitionTimeout.current)
+          transitionTimeout.current = null
+        }
+      }
     }
   }, [heroStage, isHeroTransitioning, setHeroTransitioning])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      isTouchActive.current = false
+      if (transitionTimeout.current) {
+        clearTimeout(transitionTimeout.current)
+      }
+    }
+  }, [])
 
   // Render current stage
   const renderStage = () => {
@@ -157,7 +233,7 @@ const HeroStageManager = ({ className = '' }: HeroStageManagerProps) => {
         </div>
         {heroStage === 4 && (
           <div className="text-xs opacity-50 mt-1">
-            Ready to explore capabilities →
+            Swipe down to explore capabilities →
           </div>
         )}
       </div>

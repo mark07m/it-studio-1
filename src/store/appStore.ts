@@ -59,20 +59,20 @@ export const useAppStore = create<AppState>((set, get) => ({
   toggleCmdK: () => set((state) => ({ cmdKOpen: !state.cmdKOpen })),
   
   // Hero stage actions
-  setHeroStage: (stage) => set({ heroStage: stage }),
+  setHeroStage: (stage) => {
+    const { isHeroTransitioning } = get()
+    if (isHeroTransitioning) return
+    set({ heroStage: stage, isHeroTransitioning: true })
+  },
   nextHeroStage: () => {
     const { heroStage, isHeroTransitioning } = get()
     if (isHeroTransitioning || heroStage >= 4) return
     set({ heroStage: (heroStage + 1) as HeroStage, isHeroTransitioning: true })
-    // Reset transition flag after animation
-    setTimeout(() => set({ isHeroTransitioning: false }), 600)
   },
   prevHeroStage: () => {
     const { heroStage, isHeroTransitioning } = get()
     if (isHeroTransitioning || heroStage <= 1) return
     set({ heroStage: (heroStage - 1) as HeroStage, isHeroTransitioning: true })
-    // Reset transition flag after animation
-    setTimeout(() => set({ isHeroTransitioning: false }), 600)
   },
   setHeroTransitioning: (transitioning) => set({ isHeroTransitioning: transitioning }),
 }))

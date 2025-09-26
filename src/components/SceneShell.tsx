@@ -78,6 +78,13 @@ const SceneShell = ({ children }: SceneShellProps) => {
   const handleWheel = useCallback((e: WheelEvent) => {
     if (isTransitioning) return
 
+    // Don't handle wheel events in Hero scene - let HeroStageManager handle them
+    if (currentScene === 'hero') {
+      console.log('SceneShell: Ignoring wheel event in Hero scene')
+      return
+    }
+
+    console.log(`SceneShell wheel: currentScene=${currentScene}, deltaY=${e.deltaY}`)
     e.preventDefault()
 
     const scenes = Object.keys(SCENES) as SceneType[]
@@ -206,36 +213,6 @@ const SceneShell = ({ children }: SceneShellProps) => {
 
   return (
     <div className="relative w-full h-full overflow-hidden flex flex-col">
-      {/* Dot Navigation */}
-      <nav className="absolute top-4 sm:top-6 left-1/2 z-40" style={{ transform: 'translateX(-50%)' }} aria-label="Scene navigation">
-        {/* note: moved transform to inline style to avoid backdrop-filter blocking */}
-        <div className="flex space-x-2" role="tablist">
-          {Object.entries(SCENES).map(([scene, config], index) => (
-            <motion.button
-              key={scene}
-              onClick={() => {
-                const scenes = Object.keys(SCENES) as SceneType[]
-                const currentIndex = scenes.indexOf(currentScene)
-                const targetIndex = scenes.indexOf(scene as SceneType)
-                const direction = targetIndex > currentIndex ? 'right' : 'left'
-                setTransitionDirection(direction)
-                setCurrentScene(scene as SceneType)
-              }}
-              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
-                currentScene === scene
-                  ? 'bg-cyan-300 scale-125'
-                  : 'bg-white/50 hover:bg-white/70'
-              }`}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-              role="tab"
-              aria-selected={currentScene === scene}
-              aria-label={`Go to ${config.title} section`}
-              tabIndex={currentScene === scene ? 0 : -1}
-            />
-          ))}
-        </div>
-      </nav>
 
       {/* Scene Content */}
       <div 

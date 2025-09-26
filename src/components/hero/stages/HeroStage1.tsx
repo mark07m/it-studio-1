@@ -2,9 +2,13 @@
 
 import { motion } from 'framer-motion'
 import { useAppStore } from '@/store/appStore'
+import { heroContent, heroAnimationConfig } from '@/data/heroContent'
 
 const HeroStage1 = () => {
   const { prefersReducedMotion } = useAppStore()
+
+  const content = heroContent.stage1
+  const config = heroAnimationConfig.stage1
 
   // Animation variants
   const containerVariants = {
@@ -30,8 +34,8 @@ const HeroStage1 = () => {
       y: 0,
       skewX: 0,
       transition: {
-        duration: prefersReducedMotion ? 0.3 : 0.8,
-        ease: prefersReducedMotion ? 'easeOut' : [0.25, 0.46, 0.45, 0.94] // backOut easing
+        duration: prefersReducedMotion ? 0.3 : config.title.duration / 1000,
+        ease: prefersReducedMotion ? 'easeOut' : config.title.easing
       }
     }
   }
@@ -42,8 +46,9 @@ const HeroStage1 = () => {
       opacity: 1, 
       y: 0,
       transition: {
-        duration: prefersReducedMotion ? 0.3 : 0.6,
-        delay: prefersReducedMotion ? 0.1 : 0.18
+        duration: prefersReducedMotion ? 0.3 : config.subtitle.duration / 1000,
+        delay: prefersReducedMotion ? 0.1 : config.subtitle.delay / 1000,
+        ease: config.subtitle.easing
       }
     }
   }
@@ -61,7 +66,7 @@ const HeroStage1 = () => {
     pulse: {
       y: [0, -4, 0],
       transition: {
-        duration: 1.5,
+        duration: config.scrollCue.pulseDuration / 1000,
         repeat: Infinity,
         ease: 'easeInOut'
       }
@@ -75,14 +80,11 @@ const HeroStage1 = () => {
       y: 0,
       transition: {
         duration: prefersReducedMotion ? 0.2 : 0.3,
-        delay: prefersReducedMotion ? 0 : i * 0.03, // Stagger effect
+        delay: prefersReducedMotion ? 0 : i * (config.title.stagger / 1000),
         ease: 'easeOut'
       }
     })
   }
-
-  const titleText = "Создаем цифровые\nрешения будущего"
-  const subtitleText = "IT-студия полного цикла разработки веб-приложений, мобильных приложений и сложных систем"
 
   return (
     <motion.div
@@ -98,16 +100,32 @@ const HeroStage1 = () => {
           className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
           variants={titleVariants}
         >
-          {titleText.split('').map((char, i) => (
-            <motion.span
-              key={i}
-              variants={letterVariants}
-              custom={i}
-              className="inline-block hover:text-purple-300 transition-colors duration-300"
-            >
-              {char === '\n' ? <br /> : char}
-            </motion.span>
-          ))}
+          {/* First line */}
+          <div className="block">
+            {content.title.line1.split('').map((char, i) => (
+              <motion.span
+                key={`line1-${i}`}
+                variants={letterVariants}
+                custom={i}
+                className="inline-block hover:text-purple-300 transition-colors duration-300"
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </motion.span>
+            ))}
+          </div>
+          {/* Second line */}
+          <div className="block">
+            {content.title.line2.split('').map((char, i) => (
+              <motion.span
+                key={`line2-${i}`}
+                variants={letterVariants}
+                custom={content.title.line1.length + i}
+                className="inline-block hover:text-purple-300 transition-colors duration-300"
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </motion.span>
+            ))}
+          </div>
         </motion.h1>
 
         {/* Subtitle */}
@@ -115,9 +133,20 @@ const HeroStage1 = () => {
           className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed"
           variants={subtitleVariants}
         >
-          {subtitleText}
+          {content.subtitle}
         </motion.p>
       </div>
+
+      {/* Scroll cue */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        variants={scrollCueVariants}
+        animate="pulse"
+      >
+        <div className="text-white/60 text-2xl font-light">
+          {content.scrollCue}
+        </div>
+      </motion.div>
 
 
     </motion.div>

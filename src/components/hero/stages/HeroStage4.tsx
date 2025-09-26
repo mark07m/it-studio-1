@@ -2,11 +2,15 @@
 
 import { motion } from 'framer-motion'
 import { useAppStore } from '@/store/appStore'
+import { heroContent, heroAnimationConfig } from '@/data/heroContent'
 import { useState, useEffect } from 'react'
 
 const HeroStage4 = () => {
   const { prefersReducedMotion } = useAppStore()
   const [showCTA, setShowCTA] = useState(false)
+  
+  const content = heroContent.stage4
+  const config = heroAnimationConfig.stage4
 
   // Trigger CTA animation after component mounts
   useEffect(() => {
@@ -65,9 +69,9 @@ const HeroStage4 = () => {
       scale: 1,
       transition: {
         type: prefersReducedMotion ? 'tween' : 'spring',
-        duration: prefersReducedMotion ? 0.3 : undefined,
-        stiffness: prefersReducedMotion ? undefined : 220,
-        damping: prefersReducedMotion ? undefined : 20,
+        duration: prefersReducedMotion ? 0.3 : config.primaryCta.duration / 1000,
+        stiffness: prefersReducedMotion ? undefined : config.primaryCta.spring.stiffness,
+        damping: prefersReducedMotion ? undefined : config.primaryCta.spring.damping,
         delay: prefersReducedMotion ? 0.1 : 0.2
       }
     }
@@ -84,8 +88,8 @@ const HeroStage4 = () => {
       y: 0,
       x: 0,
       transition: {
-        duration: prefersReducedMotion ? 0.3 : 0.4,
-        delay: prefersReducedMotion ? 0.2 : 0.32
+        duration: prefersReducedMotion ? 0.3 : config.secondaryCta.duration / 1000,
+        delay: prefersReducedMotion ? 0.2 : config.secondaryCta.delay / 1000
       }
     }
   }
@@ -95,7 +99,7 @@ const HeroStage4 = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: prefersReducedMotion ? 0.05 : 0.06,
+        staggerChildren: prefersReducedMotion ? 0.05 : config.badges.stagger / 1000,
         delayChildren: prefersReducedMotion ? 0.3 : 0.4
       }
     }
@@ -112,7 +116,7 @@ const HeroStage4 = () => {
       scale: 1,
       y: 0,
       transition: {
-        duration: prefersReducedMotion ? 0.2 : 0.3,
+        duration: prefersReducedMotion ? 0.2 : config.badges.duration / 1000,
         ease: 'easeOut'
       }
     }
@@ -138,16 +142,6 @@ const HeroStage4 = () => {
     }
   }
 
-  const titleText = "Разрабатываем инновационные\nрешения будущего"
-  const subtitleText = "IT-студия полного цикла разработки веб-приложений, мобильных приложений и сложных систем"
-
-  const badges = [
-    { text: "Web Development", color: "bg-purple-500/20 text-purple-300" },
-    { text: "Mobile Apps", color: "bg-blue-500/20 text-blue-300" },
-    { text: "AI Solutions", color: "bg-green-500/20 text-green-300" },
-    { text: "Blockchain", color: "bg-orange-500/20 text-orange-300" }
-  ]
-
   return (
     <motion.div
       className="hero-stage-4 absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-8"
@@ -164,9 +158,8 @@ const HeroStage4 = () => {
           initial="hidden"
           animate="visible"
         >
-          {titleText.split('\n').map((line, i) => (
-            <div key={i}>{line}</div>
-          ))}
+          <div>{content.title.line1}</div>
+          <div>{content.title.line2}</div>
         </motion.h1>
 
         {/* Subtitle */}
@@ -176,7 +169,7 @@ const HeroStage4 = () => {
           initial="hidden"
           animate="visible"
         >
-          {subtitleText}
+          {content.subtitle}
         </motion.p>
       </div>
 
@@ -196,7 +189,7 @@ const HeroStage4 = () => {
             }}
             whileTap={{ scale: 0.95 }}
           >
-            Начать проект
+            {content.primaryCta.text}
           </motion.button>
           
           <motion.button 
@@ -209,7 +202,7 @@ const HeroStage4 = () => {
             }}
             whileTap={{ scale: 0.95 }}
           >
-            Портфолио
+            {content.secondaryCta.text}
           </motion.button>
         </motion.div>
       )}
@@ -222,10 +215,14 @@ const HeroStage4 = () => {
           initial="hidden"
           animate="visible"
         >
-          {badges.map((badge, index) => (
+          {content.badges.map((badge, index) => (
             <motion.span
               key={index}
-              className={`px-4 py-2 ${badge.color} rounded-full text-sm font-medium backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer`}
+              className={`px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer ${
+                badge.variant === 'primary' ? 'bg-purple-500/20 text-purple-300' :
+                badge.variant === 'secondary' ? 'bg-blue-500/20 text-blue-300' :
+                'bg-green-500/20 text-green-300'
+              }`}
               variants={badgeVariants}
               whileHover={{ 
                 scale: 1.05,
@@ -239,6 +236,21 @@ const HeroStage4 = () => {
           ))}
         </motion.div>
       )}
+
+      {/* Horizontal navigation cue */}
+      <motion.div
+        className="absolute bottom-8 right-8"
+        variants={horizontalCueVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div
+          className="text-white/60 text-2xl font-light"
+          animate="pulse"
+        >
+          {content.nextCue}
+        </motion.div>
+      </motion.div>
 
     </motion.div>
   )

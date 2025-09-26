@@ -2,11 +2,15 @@
 
 import { motion } from 'framer-motion'
 import { useAppStore } from '@/store/appStore'
+import { heroContent, heroAnimationConfig } from '@/data/heroContent'
 import { useState, useEffect } from 'react'
 
 const HeroStage3 = () => {
   const { prefersReducedMotion } = useAppStore()
   const [backgroundAnimating, setBackgroundAnimating] = useState(false)
+  
+  const content = heroContent.stage3
+  const config = heroAnimationConfig.stage3
 
   // Trigger background animation after component mounts
   useEffect(() => {
@@ -63,8 +67,8 @@ const HeroStage3 = () => {
       scale: prefersReducedMotion ? 1 : 1.12,
       opacity: prefersReducedMotion ? 0.9 : 0.7,
       transition: {
-        duration: prefersReducedMotion ? 0.3 : 1.0,
-        ease: prefersReducedMotion ? 'easeOut' : [0.25, 0.46, 0.45, 0.94] // power3.inOut
+        duration: prefersReducedMotion ? 0.3 : config.background.duration / 1000,
+        ease: config.background.easing
       }
     }
   }
@@ -80,8 +84,8 @@ const HeroStage3 = () => {
       scale: prefersReducedMotion ? 1 : 1.12,
       opacity: prefersReducedMotion ? 0.9 : 0.7,
       transition: {
-        duration: prefersReducedMotion ? 0.3 : 1.0,
-        ease: prefersReducedMotion ? 'easeOut' : [0.25, 0.46, 0.45, 0.94]
+        duration: prefersReducedMotion ? 0.3 : config.background.duration / 1000,
+        ease: config.background.easing
       }
     }
   }
@@ -93,7 +97,7 @@ const HeroStage3 = () => {
     animating: {
       backgroundPosition: prefersReducedMotion ? '0% 50%' : '100% 50%',
       transition: {
-        duration: prefersReducedMotion ? 0.3 : 1.2,
+        duration: prefersReducedMotion ? 0.3 : config.background.duration / 1000,
         ease: 'easeInOut'
       }
     }
@@ -109,14 +113,11 @@ const HeroStage3 = () => {
       y: prefersReducedMotion ? 0 : -2,
       x: prefersReducedMotion ? 0 : 2,
       transition: {
-        duration: prefersReducedMotion ? 0.3 : 1.0,
+        duration: prefersReducedMotion ? 0.3 : config.background.duration / 1000,
         ease: 'easeInOut'
       }
     }
   }
-
-  const titleText = "Разрабатываем инновационные\nрешения будущего"
-  const subtitleText = "IT-студия полного цикла разработки веб-приложений, мобильных приложений и сложных систем"
 
   return (
     <motion.div
@@ -182,9 +183,8 @@ const HeroStage3 = () => {
           initial="hidden"
           animate="visible"
         >
-          {titleText.split('\n').map((line, i) => (
-            <div key={i}>{line}</div>
-          ))}
+          <div>{content.title.line1}</div>
+          <div>{content.title.line2}</div>
         </motion.h1>
 
         {/* Subtitle - static during background animation */}
@@ -194,7 +194,7 @@ const HeroStage3 = () => {
           initial="hidden"
           animate="visible"
         >
-          {subtitleText}
+          {content.subtitle}
         </motion.p>
       </motion.div>
 
