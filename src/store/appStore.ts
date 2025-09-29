@@ -8,6 +8,7 @@ export type SceneState = 'idle' | 'out' | 'in' | 'ready'
 export type HeroStage = 1 | 2 | 3 | 4
 export type CapabilityStage = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 export type PortfolioStage = 1 | 2 | 3 | 4
+export type ProcessStage = 1 | 2 | 3 | 4 | 5
 
 interface AppState {
   currentScene: SceneType
@@ -30,6 +31,10 @@ interface AppState {
   // Portfolio stage management
   portfolioStage: PortfolioStage
   isPortfolioTransitioning: boolean
+  
+  // Process stage management
+  processStage: ProcessStage
+  isProcessTransitioning: boolean
   
   // Skin management
   currentSkin: SkinName
@@ -62,6 +67,12 @@ interface AppState {
   prevPortfolioStage: () => void
   setPortfolioTransitioning: (transitioning: boolean) => void
   
+  // Process stage actions
+  setProcessStage: (stage: ProcessStage) => void
+  nextProcessStage: () => void
+  prevProcessStage: () => void
+  setProcessTransitioning: (transitioning: boolean) => void
+  
   // Skin actions
   setSkin: (skin: SkinName) => void
   nextSkin: () => void
@@ -92,6 +103,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Portfolio stage management
   portfolioStage: 1,
   isPortfolioTransitioning: false,
+  
+  // Process stage management
+  processStage: 1,
+  isProcessTransitioning: false,
   
   // Skin management
   currentSkin: 'neonGlass',
@@ -158,6 +173,24 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ portfolioStage: (portfolioStage - 1) as PortfolioStage, isPortfolioTransitioning: true })
   },
   setPortfolioTransitioning: (transitioning) => set({ isPortfolioTransitioning: transitioning }),
+  
+  // Process stage actions
+  setProcessStage: (stage) => {
+    const { isProcessTransitioning } = get()
+    if (isProcessTransitioning) return
+    set({ processStage: stage, isProcessTransitioning: true })
+  },
+  nextProcessStage: () => {
+    const { processStage, isProcessTransitioning } = get()
+    if (isProcessTransitioning || processStage >= 5) return
+    set({ processStage: (processStage + 1) as ProcessStage, isProcessTransitioning: true })
+  },
+  prevProcessStage: () => {
+    const { processStage, isProcessTransitioning } = get()
+    if (isProcessTransitioning || processStage <= 1) return
+    set({ processStage: (processStage - 1) as ProcessStage, isProcessTransitioning: true })
+  },
+  setProcessTransitioning: (transitioning) => set({ isProcessTransitioning: transitioning }),
   
   // Skin actions
   setSkin: (skin) => {
